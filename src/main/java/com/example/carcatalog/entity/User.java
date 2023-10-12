@@ -43,6 +43,6 @@ public class User extends TimeBasedEntity {
     private String username;
     @ManyToOne
     private Role role;
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "seller", cascade = CascadeType.REMOVE)
     private Set<Offer> offers;
 }

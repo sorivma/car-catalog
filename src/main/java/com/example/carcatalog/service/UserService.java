@@ -1,12 +1,12 @@
 package com.example.carcatalog.service;
 
 import com.example.carcatalog.dto.UserDTO;
+import com.example.carcatalog.entity.User;
 
 import java.util.Optional;
 import java.util.Set;
+import java.util.UUID;
 
-public interface UserService {
-    UserDTO addUser(UserDTO userDTO);
-    Set<UserDTO> findAll();
-    Optional<UserDTO> findByUsername(String username);
+public interface UserService extends BaseService<UserDTO, UUID> {
+
 }

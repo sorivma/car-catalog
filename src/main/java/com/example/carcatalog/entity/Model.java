@@ -15,6 +15,7 @@ import java.time.LocalDateTime;
 @Setter
 @Table(name = "models")
 public class Model extends TimeBasedEntity {
+
     private String name;
     private Category category;
     private String imageURL;
