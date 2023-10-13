@@ -1,12 +1,15 @@
 package com.example.carcatalog.service;
 
+import com.example.carcatalog.dto.RoleDTO;
+
+import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 public interface BaseService<T, ID> {
-    Set<T> findAll();
+    List<RoleDTO> findAll();
 
-    Optional<T> findById(ID id);
+    T findById(ID id);
 
     T add(T dto);
+
 }

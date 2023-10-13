@@ -24,6 +24,6 @@ public class Brand extends TimeBasedEntity {
         this.name = name;
     }
 
-    @Column(unique = true)
+    @Column(unique = true, nullable = false)
     private String name;
 }
