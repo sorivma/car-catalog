@@ -1,13 +1,15 @@
 package com.example.carcatalog.service;
 
 import com.example.carcatalog.dto.ModelDTO;
-import com.example.carcatalog.entity.Model;
+import jakarta.persistence.EntityNotFoundException;
+import org.hibernate.action.internal.EntityActionVetoException;
 
-import java.util.Optional;
-import java.util.Set;
-import java.util.UUID;
+import java.util.List;
 
-public interface ModelService extends BaseService<ModelDTO, UUID> {
-    void updateModel(ModelDTO modelDTO);
-    
+public interface ModelService {
+    List<ModelDTO> findAll();
+    ModelDTO findById() throws EntityNotFoundException, EntityActionVetoException;
+    ModelDTO add(ModelDTO modelDTO);
+    ModelDTO update(ModelDTO modelDTO);
+
 }

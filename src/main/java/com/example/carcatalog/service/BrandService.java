@@ -2,14 +2,19 @@ package com.example.carcatalog.service;
 
 import com.example.carcatalog.dto.BrandDTO;
 import jakarta.persistence.EntityNotFoundException;
-import org.springframework.ui.Model;
 
+import java.util.List;
 import java.util.UUID;
 
-public interface BrandService extends BaseService<BrandDTO, UUID> {
-    void updateBrand(BrandDTO brandDTO);
+public interface BrandService {
+    BrandDTO add(BrandDTO brandDTO);
 
-    BrandDTO findByName(BrandDTO name) throws EntityNotFoundException;
+    List<BrandDTO> findAll();
 
-    void delete(UUID id);
+    BrandDTO findById(UUID uuid) throws EntityNotFoundException;
+
+    BrandDTO findByName(String name) throws EntityNotFoundException;
+    BrandDTO deleteByName(String name) throws EntityNotFoundException;
+
+    BrandDTO delete(UUID uuid);
 }
