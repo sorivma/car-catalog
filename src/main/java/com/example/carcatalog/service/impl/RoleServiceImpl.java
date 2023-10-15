@@ -8,9 +8,10 @@ import com.example.carcatalog.except.NoRoleException;
 import com.example.carcatalog.except.NoUsernameException;
 import com.example.carcatalog.except.RoleNotFoundException;
 import com.example.carcatalog.except.UserNotFoundException;
+import com.example.carcatalog.mapper.Mapper;
 import com.example.carcatalog.mapper.impl.RoleMapper;
-import com.example.carcatalog.repository.RoleRepository;
-import com.example.carcatalog.repository.UserRepository;
+import com.example.carcatalog.repos.RoleRepository;
+import com.example.carcatalog.repos.UserRepository;
 import com.example.carcatalog.service.RoleService;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
@@ -24,7 +25,7 @@ import java.util.stream.Collectors;
 public class RoleServiceImpl implements RoleService {
     private final RoleRepository roleRepository;
     private final UserRepository userRepository;
-    private final RoleMapper roleMapper;
+    private final Mapper<Role, RoleDTO> roleMapper;
     public RoleServiceImpl(RoleRepository roleRepository, UserRepository userRepository, RoleMapper roleMapper) {
         this.roleRepository = roleRepository;
         this.userRepository = userRepository;

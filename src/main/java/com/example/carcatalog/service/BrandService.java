@@ -7,7 +7,6 @@ import org.springframework.ui.Model;
 import java.util.UUID;
 
 public interface BrandService extends BaseService<BrandDTO, UUID> {
-    void updateBrand(BrandDTO brandDTO);
 
     BrandDTO findByName(BrandDTO name) throws EntityNotFoundException;
 

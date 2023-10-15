@@ -4,16 +4,18 @@ import com.example.carcatalog.dto.UserDTO;
 import com.example.carcatalog.entity.Role;
 import com.example.carcatalog.entity.User;
 import com.example.carcatalog.except.NoUsernameException;
+import com.example.carcatalog.except.UserDeactivatedException;
 import com.example.carcatalog.except.UserNotFoundException;
-import com.example.carcatalog.mapper.impl.UserMapper;
-import com.example.carcatalog.repository.RoleRepository;
-import com.example.carcatalog.repository.UserRepository;
+import com.example.carcatalog.mapper.Mapper;
+import com.example.carcatalog.repos.RoleRepository;
+import com.example.carcatalog.repos.UserRepository;
 import com.example.carcatalog.service.UserService;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -21,13 +23,14 @@ import java.util.stream.Collectors;
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
-    private final UserMapper userMapper;
+    private final Mapper<User, UserDTO> userMapper;
 
-    public UserServiceImpl(UserRepository userRepository, RoleRepository roleRepository, UserMapper userMapper) {
+    public UserServiceImpl(UserRepository userRepository, RoleRepository roleRepository, Mapper<User, UserDTO> userMapper) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.userMapper = userMapper;
     }
+
 
     @Override
     public List<UserDTO> findAll() {
@@ -45,15 +48,24 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDTO add(UserDTO dto) {
-        User user = userMapper.toModel(dto);
-
-        if (user.getUsername() == null) {
+        if (dto.getUsername() == null) {
             throw new NoUsernameException();
         }
-        if (user.getId() == null) {
-            user.setCreated(LocalDateTime.now());
+
+        User user = userMapper.toModel(dto);
+        Optional<User> dbUser = userRepository.findByUsername(dto.getUsername());
+
+        if (dbUser.isPresent()) {
+            if (!dbUser.get().getIsActive()) {
+                throw new UserDeactivatedException();
+            }
+
+            user.setId(dbUser.get().getId());
+            user.setModified(LocalDateTime.now());
+            return userMapper.toDTO(userRepository.save(user));
         }
 
+        user.setCreated(LocalDateTime.now());
         user.setModified(LocalDateTime.now());
         user.setIsActive(true);
         user.setRole(roleRepository

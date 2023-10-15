@@ -1,8 +1,7 @@
-package com.example.carcatalog.init.impl;
+package com.example.carcatalog.io.impl;
 
-import com.example.carcatalog.init.JsonReader;
+import com.example.carcatalog.io.JsonReader;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import jakarta.annotation.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.io.ClassPathResource;
@@ -17,11 +16,11 @@ import java.util.Arrays;
 import java.util.List;
 
 @Component
-public class GsonJsonParser<T> implements JsonReader<T> {
+public class JacksonJsonReader<T> implements JsonReader<T> {
     private final ObjectMapper objectMapper;
     private final Logger logger = LoggerFactory.getLogger(getClass().getName());
 
-    public GsonJsonParser(ObjectMapper objectMapper) {
+    public JacksonJsonReader(ObjectMapper objectMapper) {
 
         this.objectMapper = objectMapper;
     }
