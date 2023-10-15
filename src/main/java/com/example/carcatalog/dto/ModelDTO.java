@@ -2,10 +2,7 @@ package com.example.carcatalog.dto;
 
 import com.example.carcatalog.entity.Brand;
 import com.example.carcatalog.entity.Model;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -14,6 +11,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @Getter
 @Setter
+@ToString
 public class ModelDTO {
     private UUID id;
     private String name;

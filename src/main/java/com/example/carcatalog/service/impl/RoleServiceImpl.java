@@ -4,6 +4,10 @@ import com.example.carcatalog.dto.RoleDTO;
 import com.example.carcatalog.dto.UserDTO;
 import com.example.carcatalog.entity.Role;
 import com.example.carcatalog.entity.User;
+import com.example.carcatalog.except.NoRoleException;
+import com.example.carcatalog.except.NoUsernameException;
+import com.example.carcatalog.except.RoleNotFoundException;
+import com.example.carcatalog.except.UserNotFoundException;
 import com.example.carcatalog.mapper.impl.RoleMapper;
 import com.example.carcatalog.repository.RoleRepository;
 import com.example.carcatalog.repository.UserRepository;
@@ -11,6 +15,7 @@ import com.example.carcatalog.service.RoleService;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -53,18 +58,25 @@ public class RoleServiceImpl implements RoleService {
     @Override
     public RoleDTO assign(UserDTO userDTO) {
         if (userDTO.getRole() == null){
-            throw new IllegalArgumentException("No role provided");
+            throw new NoRoleException();
         }
 
-        Role role = roleRepository.findById(
-                userDTO.getRole().getId())
-                .orElseThrow(() -> new EntityNotFoundException("No such role"));
+        if (userDTO.getUsername() == null){
+            throw new NoUsernameException();
+        }
+
+        Role role = roleRepository.findByName(
+                userDTO.getRole().getName())
+                .orElseThrow(RoleNotFoundException::new);
 
         User user = userRepository.findByUsername
                 (userDTO.getUsername())
-                .orElseThrow(() -> new EntityNotFoundException("No user with such username"));
+                .orElseThrow(UserNotFoundException::new);
 
         user.setRole(role);
+        user.setModified(LocalDateTime.now());
+
+        userRepository.save(user);
 
         return roleMapper.toDTO(role);
     };

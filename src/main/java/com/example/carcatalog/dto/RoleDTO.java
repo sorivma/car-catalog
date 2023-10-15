@@ -1,10 +1,9 @@
 package com.example.carcatalog.dto;
 
 import com.example.carcatalog.entity.Role;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import lombok.*;
 
 import java.util.UUID;
 
@@ -12,7 +11,9 @@ import java.util.UUID;
 @NoArgsConstructor
 @Getter
 @Setter
+@ToString
 public class RoleDTO {
     private UUID id;
+    @Enumerated(EnumType.STRING)
     private Role.RoleName name;
 }

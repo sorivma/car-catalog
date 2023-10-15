@@ -7,5 +7,5 @@ import java.io.IOException;
 import java.util.List;
 
 public interface JsonReader<T> {
-     List<T> readFromJson(String fileName);
+     List<T> readFromJson(String fileName, Class<T[]> clazz);
 }
