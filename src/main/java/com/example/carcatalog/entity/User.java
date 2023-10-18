@@ -39,10 +39,8 @@ public class User extends TimeBasedEntity {
     private String lastName;
     private String imageURL;
     private String password;
-    @Column(unique = true)
+    @Column(unique = true, nullable = false)
     private String username;
     @ManyToOne
     private Role role;
-    @OneToMany(mappedBy = "seller", cascade = CascadeType.REMOVE)
-    private Set<Offer> offers;
 }

@@ -2,10 +2,9 @@ package com.example.carcatalog.dto;
 
 import com.example.carcatalog.entity.Brand;
 import com.example.carcatalog.entity.Model;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -14,14 +13,17 @@ import java.util.UUID;
 @NoArgsConstructor
 @Getter
 @Setter
+@ToString
+@Builder
 public class ModelDTO {
     private UUID id;
     private String name;
+    @Enumerated(EnumType.STRING)
     private Model.Category category;
     private String imageURL;
-    private LocalDateTime startYear;
-    private LocalDateTime endYear;
+    private Integer startYear;
+    private Integer endYear;
     private LocalDateTime created;
     private LocalDateTime modified;
-    private Brand brand;
+    private String brandName;
 }

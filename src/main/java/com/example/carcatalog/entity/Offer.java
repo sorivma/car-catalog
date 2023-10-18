@@ -1,8 +1,6 @@
 package com.example.carcatalog.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -17,12 +15,14 @@ import java.time.LocalDateTime;
 @Table(name = "offers")
 public class Offer extends TimeBasedEntity {
     private String description;
+    @Enumerated(EnumType.STRING)
     private Engine engine;
     private String imageURL;
     private Integer mileage;
     private BigDecimal price;
+    @Enumerated(EnumType.STRING)
     private Transmission transmission;
-    private LocalDateTime year;
+    private Integer year;
     @ManyToOne
     private User seller;
     @ManyToOne
@@ -36,7 +36,7 @@ public class Offer extends TimeBasedEntity {
                  Integer mileage,
                  BigDecimal price,
                  Transmission transmission,
-                 LocalDateTime year,
+                 Integer year,
                  User user,
                  Model model) {
         super(created, modified);

@@ -1,14 +1,13 @@
 package com.example.carcatalog.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.Set;
 
 @Entity
 @AllArgsConstructor
@@ -24,6 +23,9 @@ public class Brand extends TimeBasedEntity {
         this.name = name;
     }
 
-    @Column(unique = true)
+    @Column(unique = true, nullable = false)
     private String name;
+
+    @OneToMany(mappedBy = "brand", cascade = CascadeType.REMOVE)
+    private Set<Model> models;
 }

@@ -1,12 +1,7 @@
 package com.example.carcatalog.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import jakarta.persistence.*;
+import lombok.*;
 
 import java.util.Set;
 
@@ -17,6 +12,7 @@ import java.util.Set;
 @Setter
 @Table(name = "roles")
 public class Role extends BaseEntity {
+    @Enumerated(EnumType.STRING)
     private RoleName name;
     @OneToMany(mappedBy = "role")
     private Set<User> users;

@@ -1,8 +1,6 @@
 package com.example.carcatalog.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -15,12 +13,13 @@ import java.time.LocalDateTime;
 @Setter
 @Table(name = "models")
 public class Model extends TimeBasedEntity {
-
+    @Column(nullable = false)
     private String name;
+    @Enumerated(EnumType.STRING)
     private Category category;
     private String imageURL;
-    private LocalDateTime startYear;
-    private LocalDateTime endYear;
+    private Integer startYear;
+    private Integer endYear;
     @ManyToOne
     private Brand brand;
 
@@ -29,8 +28,8 @@ public class Model extends TimeBasedEntity {
                  String name,
                  Category category,
                  String imageURL,
-                 LocalDateTime startYear,
-                 LocalDateTime endYear,
+                 Integer startYear,
+                 Integer endYear,
                  Brand brand) {
         super(created, modified);
         this.name = name;
