@@ -58,7 +58,7 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     public RoleDTO assign(UserDTO userDTO) {
-        if (userDTO.getRole() == null){
+        if (userDTO.getRoleName() == null){
             throw new NoRoleException();
         }
 
@@ -67,7 +67,7 @@ public class RoleServiceImpl implements RoleService {
         }
 
         Role role = roleRepository.findByName(
-                userDTO.getRole().getName())
+                userDTO.getRoleName())
                 .orElseThrow(RoleNotFoundException::new);
 
         User user = userRepository.findByUsername

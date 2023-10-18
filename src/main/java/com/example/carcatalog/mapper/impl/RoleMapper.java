@@ -4,6 +4,7 @@ import com.example.carcatalog.dto.RoleDTO;
 import com.example.carcatalog.entity.Role;
 import com.example.carcatalog.mapper.Mapper;
 import org.modelmapper.ModelMapper;
+import org.modelmapper.TypeMap;
 import org.springframework.stereotype.Component;
 
 @Component

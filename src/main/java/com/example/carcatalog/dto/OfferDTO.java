@@ -14,6 +14,7 @@ import java.util.UUID;
 @Getter
 @Setter
 @ToString
+@Builder
 public class OfferDTO {
     private UUID id;
     private String description;
@@ -24,9 +25,9 @@ public class OfferDTO {
     private BigDecimal price;
     @Enumerated(EnumType.STRING)
     private Offer.Transmission transmission;
-    private LocalDateTime year;
+    private Integer year;
     private LocalDateTime created;
     private LocalDateTime modified;
-    private ModelDTO model;
-    private UserDTO seller;
+    private UUID modelUUID;
+    private String sellerUsername;
 }

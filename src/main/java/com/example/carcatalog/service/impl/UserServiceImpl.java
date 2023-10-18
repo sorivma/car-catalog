@@ -54,19 +54,22 @@ public class UserServiceImpl implements UserService {
 
         User user = userMapper.toModel(dto);
         Optional<User> dbUser = userRepository.findByUsername(dto.getUsername());
+        user.setIsActive(true);
 
         if (dbUser.isPresent()) {
             if (!dbUser.get().getIsActive()) {
                 throw new UserDeactivatedException();
             }
 
+            user.setRole(dbUser.get().getRole());
             user.setId(dbUser.get().getId());
+            user.setCreated(dbUser.get().getCreated());
             user.setModified(LocalDateTime.now());
             return userMapper.toDTO(userRepository.save(user));
         }
 
         user.setCreated(LocalDateTime.now());
-        user.setModified(LocalDateTime.now());
+//        user.setModified(LocalDateTime.now());
         user.setIsActive(true);
         user.setRole(roleRepository
                 .findByName(Role.RoleName.USER)

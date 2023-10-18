@@ -12,6 +12,7 @@ import java.util.UUID;
 @Getter
 @Setter
 @ToString
+@Builder
 public class RoleDTO {
     private UUID id;
     @Enumerated(EnumType.STRING)

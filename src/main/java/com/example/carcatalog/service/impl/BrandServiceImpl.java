@@ -3,6 +3,7 @@ package com.example.carcatalog.service.impl;
 import com.example.carcatalog.dto.BrandDTO;
 import com.example.carcatalog.entity.Brand;
 import com.example.carcatalog.except.BrandNotFoundException;
+import com.example.carcatalog.except.InvalidIdException;
 import com.example.carcatalog.except.NoBrandNameException;
 import com.example.carcatalog.mapper.Mapper;
 import com.example.carcatalog.repos.BrandRepository;
@@ -51,16 +52,17 @@ public class BrandServiceImpl implements BrandService {
         }
 
         Brand brand = brandMapper.toModel(dto);
-        Optional<Brand> dbBrand = brandRepository.findBrandByName(brand.getName());
 
-        if (dbBrand.isPresent()) {
-            brand.setId(dbBrand.get().getId());
+        if (brand.getId() != null) {
+            if (!brandRepository.existsById(brand.getId())) {
+                throw new InvalidIdException();
+            }
             brand.setModified(LocalDateTime.now());
             return brandMapper.toDTO(brandRepository.save(brand));
         }
 
         brand.setCreated(LocalDateTime.now());
-        brand.setModified(LocalDateTime.now());
+//      brand.setModified(LocalDateTime.now());
 
         return brandMapper.toDTO(brandRepository.save(brand));
     }
@@ -74,6 +76,6 @@ public class BrandServiceImpl implements BrandService {
 
     @Override
     public void delete(UUID id) throws EntityNotFoundException {
-
+        brandRepository.deleteById(id);
     }
 }

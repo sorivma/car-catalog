@@ -14,15 +14,16 @@ import java.util.UUID;
 @Getter
 @Setter
 @ToString
+@Builder
 public class ModelDTO {
     private UUID id;
     private String name;
     @Enumerated(EnumType.STRING)
     private Model.Category category;
     private String imageURL;
-    private LocalDateTime startYear;
-    private LocalDateTime endYear;
+    private Integer startYear;
+    private Integer endYear;
     private LocalDateTime created;
     private LocalDateTime modified;
-    private Brand brand;
+    private String brandName;
 }

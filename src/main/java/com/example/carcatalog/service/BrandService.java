@@ -9,6 +9,5 @@ import java.util.UUID;
 public interface BrandService extends BaseService<BrandDTO, UUID> {
 
     BrandDTO findByName(BrandDTO name) throws EntityNotFoundException;
-
     void delete(UUID id) throws EntityNotFoundException;
 }

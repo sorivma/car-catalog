@@ -10,6 +10,7 @@ import java.util.UUID;
 @Getter
 @Setter
 @ToString
+@Builder
 public class BrandDTO {
     private UUID id;
     private String name;
