@@ -2,14 +2,16 @@ package com.example.carcatalog.entity;
 
 import com.example.carcatalog.entity.converter.enumer.EngineConverter;
 import com.example.carcatalog.entity.converter.enumer.TransmissionConverter;
-import jakarta.persistence.*;
+import jakarta.persistence.Convert;
+import jakarta.persistence.Entity;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 
 @Entity
 @NoArgsConstructor
