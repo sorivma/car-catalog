@@ -32,29 +32,6 @@ public class Offer extends TimeBasedEntity {
     @ManyToOne
     private Model model;
 
-    public Offer(LocalDateTime created,
-                 LocalDateTime modified,
-                 String description,
-                 Engine engine,
-                 String imageURL,
-                 Integer mileage,
-                 BigDecimal price,
-                 Transmission transmission,
-                 Integer year,
-                 User user,
-                 Model model) {
-        super(created, modified);
-        this.description = description;
-        this.engine = engine;
-        this.imageURL = imageURL;
-        this.mileage = mileage;
-        this.price = price;
-        this.transmission = transmission;
-        this.year = year;
-        this.seller = user;
-        this.model = model;
-    }
-
     public enum Engine implements OrdinalEnum{
         GASOLINE(10),
         DIESEL(20),
