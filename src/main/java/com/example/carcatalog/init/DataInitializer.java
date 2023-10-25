@@ -45,6 +45,7 @@ public class DataInitializer implements CommandLineRunner {
         this.userReader = userReader;
         this.brandReader = brandReader;
         this.modelReader = modelReader;
+
     }
 
     @Override
@@ -69,13 +70,13 @@ public class DataInitializer implements CommandLineRunner {
         // Assign Admin role to user with username sorivma or user under index 0
         UserDTO ars = users.stream().filter((user) -> user.getUsername().equals("sorivma"))
                 .findFirst()
-                .orElse(users.get(0));;
+                .orElse(users.get(0));
         ars.setRoleName(Role.RoleName.ADMIN);
         roleService.assign(ars);
 
         // Update user
         ars.setLastName("Дуброки");
-        logger.info("Updated surname for user with username" + ars.getUsername()  + " :" + userService.add(ars)
+        logger.info("Updated surname for user with username" + ars.getUsername() + " :" + userService.add(ars)
                 .toString());
 
         // Deactivate user
@@ -105,7 +106,7 @@ public class DataInitializer implements CommandLineRunner {
         modelDTO.setName(modelDTO.getName() + " Test modified");
         modelDTO.setBrandName("BMW");
         modelDTO.setCategory(Model.Category.CAR);
-        ModelDTO savedModel =  modelService.update(modelDTO);
+        ModelDTO savedModel = modelService.update(modelDTO);
         logger.info("Model updated: " + savedModel);
 
         // Init offers
@@ -115,7 +116,7 @@ public class DataInitializer implements CommandLineRunner {
                 .modelUUID(modelService.findAll().get(0).getId())
                 .build();
         OfferDTO savedOffer = offerService.add(offerDTO);
-        System.out.println(savedOffer);
+
 
         savedOffer.setDescription("Cool car");
         savedOffer.setEngine(Offer.Engine.GASOLINE);
@@ -124,10 +125,11 @@ public class DataInitializer implements CommandLineRunner {
         savedOffer.setTransmission(Offer.Transmission.MANUAL);
         savedOffer.setMileage(1000);
         savedOffer.setYear(2010);
-        offerService.update(savedOffer);
+        System.out.println(offerService.update(savedOffer));
 
         // delete actions test
 //        offerService.delete(savedOffer.getId());
 //        brandService.delete(updatedBrandDTO.getId());
+
     }
 }

@@ -1,5 +1,6 @@
 package com.example.carcatalog.entity;
 
+import com.example.carcatalog.entity.converter.enumer.CategoryConverter;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,7 +16,7 @@ import java.time.LocalDateTime;
 public class Model extends TimeBasedEntity {
     @Column(nullable = false)
     private String name;
-    @Enumerated(EnumType.STRING)
+    @Convert(converter = CategoryConverter.class)
     private Category category;
     private String imageURL;
     private Integer startYear;
@@ -40,10 +41,21 @@ public class Model extends TimeBasedEntity {
         this.brand = brand;
     }
 
-    public enum Category {
-        CAR,
-        BUSS,
-        TRUCK,
-        MOTORCYCLE
+    public enum Category implements OrdinalEnum {
+        CAR(10),
+        BUSS(20),
+        TRUCK(30),
+        MOTORCYCLE(40);
+
+        private final Integer ordinal;
+
+        Category(Integer ordinal) {
+            this.ordinal = ordinal;
+        }
+
+        @Override
+        public Integer getOrdinal() {
+            return ordinal;
+        }
     }
 }

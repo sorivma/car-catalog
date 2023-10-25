@@ -1,9 +1,12 @@
 package com.example.carcatalog.entity;
 
+import com.example.carcatalog.entity.converter.enumer.EngineConverter;
+import com.example.carcatalog.entity.converter.enumer.TransmissionConverter;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -13,14 +16,15 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @Table(name = "offers")
+@ToString
 public class Offer extends TimeBasedEntity {
     private String description;
-    @Enumerated(EnumType.STRING)
+    @Convert(converter = EngineConverter.class)
     private Engine engine;
     private String imageURL;
     private Integer mileage;
     private BigDecimal price;
-    @Enumerated(EnumType.STRING)
+    @Convert(converter = TransmissionConverter.class)
     private Transmission transmission;
     private Integer year;
     @ManyToOne
@@ -51,15 +55,36 @@ public class Offer extends TimeBasedEntity {
         this.model = model;
     }
 
-    public enum Engine {
-        GASOLINE,
-        DIESEL,
-        ELECTRIC,
-        HYBRID
+    public enum Engine implements OrdinalEnum{
+        GASOLINE(10),
+        DIESEL(20),
+        ELECTRIC(30),
+        HYBRID(40);
+        private final Integer ordinal;
+
+        Engine(Integer ordinal) {
+            this.ordinal = ordinal;
+        }
+
+        @Override
+        public Integer getOrdinal() {
+            return ordinal;
+        }
     }
 
-    public enum Transmission {
-        MANUAL,
-        AUTOMATIC
+    public enum Transmission implements OrdinalEnum{
+        MANUAL(10),
+        AUTOMATIC(20);
+
+        private final Integer ordinal;
+
+        Transmission(Integer ordinal) {
+            this.ordinal = ordinal;
+        }
+
+        @Override
+        public Integer getOrdinal() {
+            return ordinal;
+        }
     }
 }

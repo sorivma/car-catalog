@@ -10,6 +10,6 @@ import java.util.UUID;
 
 @Repository
 public interface OfferRepository extends JpaRepository<Offer, UUID> {
-    @Query("select o from Offer o join User u where u.isActive = true ")
+    @Query("SELECT o FROM Offer o WHERE o.seller.isActive = true")
     List<Offer> findAllActive();
 }
