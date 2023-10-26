@@ -15,15 +15,12 @@ import java.util.UUID;
 @Setter
 @ToString
 @Builder
-public class ModelDTO {
-    private UUID id;
+public class ModelDTO extends BaseDTO{
     private String name;
     @Enumerated(EnumType.STRING)
     private Model.Category category;
     private String imageURL;
     private Integer startYear;
     private Integer endYear;
-    private LocalDateTime created;
-    private LocalDateTime modified;
     private String brandName;
 }

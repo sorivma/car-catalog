@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Getter
 @Setter
-public abstract class TimeBasedEntity extends BaseEntity {
+public abstract class AuditBaseEntity extends BaseEntity {
     private LocalDateTime created;
     private LocalDateTime modified;
 }

@@ -11,9 +11,6 @@ import java.util.UUID;
 @Setter
 @ToString
 @Builder
-public class BrandDTO {
-    private UUID id;
+public class BrandDTO extends BaseDTO{
     private String name;
-    private LocalDateTime created;
-    private LocalDateTime modified;
 }

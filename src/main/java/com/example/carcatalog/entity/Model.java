@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @Table(name = "models")
-public class Model extends TimeBasedEntity {
+public class Model extends AuditBaseEntity {
     @Column(nullable = false)
     private String name;
     @Convert(converter = CategoryConverter.class)

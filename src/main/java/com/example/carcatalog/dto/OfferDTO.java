@@ -15,8 +15,7 @@ import java.util.UUID;
 @Setter
 @ToString
 @Builder
-public class OfferDTO {
-    private UUID id;
+public class OfferDTO extends BaseDTO {
     private String description;
     @Enumerated(EnumType.STRING)
     private Offer.Engine engine;
@@ -26,8 +25,6 @@ public class OfferDTO {
     @Enumerated(EnumType.STRING)
     private Offer.Transmission transmission;
     private Integer year;
-    private LocalDateTime created;
-    private LocalDateTime modified;
     private UUID modelUUID;
     private String sellerUsername;
 }

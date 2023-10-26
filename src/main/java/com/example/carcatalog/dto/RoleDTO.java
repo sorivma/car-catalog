@@ -13,8 +13,7 @@ import java.util.UUID;
 @Setter
 @ToString
 @Builder
-public class RoleDTO {
-    private UUID id;
+public class RoleDTO extends BaseDTO{
     @Enumerated(EnumType.STRING)
     private Role.RoleName name;
 }

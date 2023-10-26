@@ -12,8 +12,7 @@ import java.util.UUID;
 @Setter
 @ToString
 @Builder
-public class UserDTO {
-    private UUID id;
+public class UserDTO extends BaseDTO{
     private String username;
     private String password;
     private String firstName;
@@ -21,6 +20,4 @@ public class UserDTO {
     private Boolean isActive;
     private Role.RoleName roleName;
     private String imageURL;
-    private LocalDateTime created;
-    private LocalDateTime modified;
 }

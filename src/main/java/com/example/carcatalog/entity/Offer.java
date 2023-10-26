@@ -19,7 +19,7 @@ import java.math.BigDecimal;
 @Setter
 @Table(name = "offers")
 @ToString
-public class Offer extends TimeBasedEntity {
+public class Offer extends AuditBaseEntity {
     private String description;
     @Convert(converter = EngineConverter.class)
     private Engine engine;

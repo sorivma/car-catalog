@@ -54,12 +54,12 @@ public class ModelServiceImpl implements ModelService {
         if (dto.getName() == null) {
             throw new IllegalArgumentException("No model name provided");
         }
-        if (dto.getId() == null) {
-            dto.setCreated(LocalDateTime.now());
-        }
 
         Model model = carModelMapper.toModel(dto);
-        model.setCreated(LocalDateTime.now());
+        if (model.getId() == null) {
+            model.setCreated(LocalDateTime.now());
+        }
+        model.setModified(LocalDateTime.now());
         model.setBrand(brandRepository.findBrandByName(dto.getBrandName()).orElseThrow(BrandNotFoundException::new));
         return carModelMapper.toDTO(modelRepository.save(model));
     }

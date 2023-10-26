@@ -15,7 +15,7 @@ import java.util.Set;
 @Getter
 @Setter
 @Table(name = "brands")
-public class Brand extends TimeBasedEntity {
+public class Brand extends AuditBaseEntity {
     public Brand(LocalDateTime created,
                  LocalDateTime modified,
                  String name) {

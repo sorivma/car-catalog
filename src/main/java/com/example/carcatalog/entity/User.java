@@ -6,14 +6,13 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
-import java.util.Set;
 
 @Entity
 @NoArgsConstructor
 @Getter
 @Setter
 @Table(name = "users")
-public class User extends TimeBasedEntity {
+public class User extends AuditBaseEntity {
 
     public User(LocalDateTime created,
                 LocalDateTime modified,
