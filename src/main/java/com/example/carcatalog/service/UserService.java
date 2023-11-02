@@ -8,6 +8,6 @@ import java.util.Set;
 import java.util.UUID;
 
 public interface UserService extends BaseService<UserDTO, UUID> {
-    void deactivate(UserDTO userDTO);
+    void deactivate(String username);
     UserDTO findByUserName(UserDTO userDTO);
 }

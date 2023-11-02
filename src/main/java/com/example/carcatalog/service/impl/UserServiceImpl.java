@@ -79,13 +79,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void deactivate(UserDTO userDTO) {
-        if (userDTO.getUsername() == null) {
-            throw new NoUsernameException();
-        }
-
+    public void deactivate(String username) {
         User user = userRepository
-                .findByUsername(userDTO.getUsername())
+                .findByUsername(username)
                 .orElseThrow(UserNotFoundException::new);
 
         user.setIsActive(!user.getIsActive());

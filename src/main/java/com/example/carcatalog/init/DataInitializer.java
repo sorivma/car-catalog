@@ -80,7 +80,7 @@ public class DataInitializer implements CommandLineRunner {
                 .toString());
 
         // Deactivate user
-        userService.deactivate(ars);
+        userService.deactivate(ars.getUsername());
 
         // Init brands
         List<BrandDTO> brands = brandReader.readFromJson(FOLDER + "brand.json", BrandDTO[].class);
