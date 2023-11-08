@@ -3,6 +3,7 @@ package com.example.carcatalog.controller;
 import com.example.carcatalog.dto.UserDTO;
 import com.example.carcatalog.service.UserService;
 import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -14,9 +15,10 @@ import java.util.UUID;
 @Controller
 @RequestMapping("/users")
 public class UserController {
-    private final UserService userService;
+    private UserService userService;
 
-    public UserController(UserService userService) {
+    @Autowired
+    public void setUserService(UserService userService) {
         this.userService = userService;
     }
 
