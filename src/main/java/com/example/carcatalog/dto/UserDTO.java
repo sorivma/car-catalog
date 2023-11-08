@@ -1,20 +1,25 @@
 package com.example.carcatalog.dto;
 
 import com.example.carcatalog.entity.Role;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotEmpty;
 import lombok.*;
-
-import java.time.LocalDateTime;
-import java.util.UUID;
 
 @AllArgsConstructor
 @NoArgsConstructor
-@Getter
 @Setter
+@Getter
 @ToString
 @Builder
-public class UserDTO extends BaseDTO{
+public class UserDTO extends BaseDTO {
+    @NotEmpty
+    @Min(5)
     private String username;
+    @NotEmpty
+    @Min(8)
     private String password;
+    @NotEmpty
+    @Min(3)
     private String firstName;
     private String lastName;
     private Boolean isActive;

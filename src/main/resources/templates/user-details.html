@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Пользователь</title>
+</head>
+<body>
+<p>ID: <span th:text="${user.id}"></span></p>
+<p>Ник: <span th:text="${user.username}"></span></p>
+<p>Пароль: <span th:text="${user.password}"></span></p>
+<p>Имя: <span th:text="${user.firstName}"></span></p>
+<p>Фамилия: <span th:text="${user.lastName}"></span></p>
+<p>Активен: <span th:text="${user.isActive}"></span></p>
+<p>Роль: <span th:text="${user.roleName}"></span></p>
+<img th:src="${user.imageURL}" alt="Нет фотки">
+<form th:action="@{/users}">
+    <button type="submit">Назад</button>
+</form>
+</body>
+</html>
