@@ -1,18 +1,27 @@
 package com.example.carcatalog.dto;
 
-import com.example.carcatalog.conf.ApplicationConstants;
 import com.example.carcatalog.entity.Offer;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Positive;
 import lombok.*;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 import java.util.UUID;
 
+/**
+ * DTO for the {@link com.example.carcatalog.entity.Offer} entity.
+ * Used for the view layer.
+ * Contains the description, engine, imageURL, mileage, price, transmission, year, modelUUID, sellerUsername fields.
+ * Extends {@link BaseDTO}.
+ * <p>
+ *     The annotations are used by the validator.
+ *     <br>
+ *     The annotations are:
+ *     <ul>
+ *         <li>{@link Positive} - the field must be positive</li>
+ *         <li>{@link Enumerated} - the field must be one of the enum values</li>
+ */
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
@@ -32,9 +41,6 @@ public class OfferDTO extends BaseDTO {
     private Offer.Transmission transmission;
     @Positive
     private Integer year;
-    @Pattern(regexp = ApplicationConstants.ValidationConstants.UUID_PATTERN,
-            message = "Invalid UUID pattern for model ID")
     private UUID modelUUID;
-    @Min(5)
     private String sellerUsername;
 }

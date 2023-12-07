@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Обновление пользователя</title>
+</head>
+<body>
+<div class="form-style-6">
+    <form th:action="@{/users/update/{username}(username=${user.username})}" method="post" th:object="${user}">
+        <div>
+            <label for="username">Логин:</label>
+            <input type="text" id="username" name="username" th:field="*{username}" disabled="disabled">
+            <span th:if="${#fields.hasErrors('username')}" th:errors="*{username}">Неправильный ник</span>
+        </div>
+        <div>
+            <label for="password">Пароль:</label>
+            <input type="text" id="password" name="password" th:field="*{password}">
+            <span th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Неправильный ник</span>
+        </div>
+        <div>
+            <label for="firstName">Имя:</label>
+            <input type="text" id="firstName" name="firstName" th:field="*{firstName}">
+            <span th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}">Неправильный ник</span>
+        </div>
+        <div>
+            <label for="lastName">Фамилия:</label>
+            <input type="text" id="lastName" name="lastName" th:field="*{lastName}">
+            <span th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}">Неправильный ник</span>
+        </div>
+        <div>
+            <label for="isActive">Активен:</label>
+            <input type="text" id="isActive" name="isActive" th:field="*{isActive}" disabled="disabled">
+            <span th:if="${#fields.hasErrors('isActive')}" th:errors="*{isActive}">Неправильный ник</span>
+        </div>
+        <div>
+            <input type="submit" value="Обновить">
+        </div>
+    </form>
+</div>
+</body>
+</html>

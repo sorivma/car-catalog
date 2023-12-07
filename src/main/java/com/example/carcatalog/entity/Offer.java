@@ -13,6 +13,31 @@ import lombok.ToString;
 
 import java.math.BigDecimal;
 
+/**
+ * Represents an offer.
+ * <p>
+ * The annotations are:
+ * <ul>
+ *     <li>{@link Entity} - the class is an entity</li>
+ *     <li>{@link Table} - the name of the table in the database</li>
+ *     <li>{@link Convert} - the {@link Engine} enum is converted to its ordinal value and vice versa</li>
+ *     <li>{@link Convert} - the {@link Transmission} enum is converted to its ordinal value and vice versa</li>
+ *     <li>{@link ManyToOne} - the relationship between the offer and the seller is many to one</li>
+ *     <li>{@link ManyToOne} - the relationship between the offer and the model is many to one</li>
+ * </ul>
+ * The fields are:
+ * <ul>
+ *     <li>{@link String} description - the description of the offer</li>
+ *     <li>{@link Engine} engine - the engine of the offer</li>
+ *     <li>{@link String} imageURL - the URL of the image of the offer</li>
+ *     <li>{@link Integer} mileage - the mileage of the offer</li>
+ *     <li>{@link BigDecimal} price - the price of the offer</li>
+ *     <li>{@link Transmission} transmission - the transmission of the offer</li>
+ *     <li>{@link Integer} year - the year of the offer</li>
+ *     <li>{@link User} seller - the seller of the offer</li>
+ *     <li>{@link Model} model - the model of the offer</li>
+ * </ul>
+ */
 @Entity
 @NoArgsConstructor
 @Getter
@@ -34,7 +59,7 @@ public class Offer extends AuditBaseEntity {
     @ManyToOne
     private Model model;
 
-    public enum Engine implements OrdinalEnum{
+    public enum Engine implements OrdinalEnum {
         GASOLINE(10),
         DIESEL(20),
         ELECTRIC(30),
@@ -51,7 +76,7 @@ public class Offer extends AuditBaseEntity {
         }
     }
 
-    public enum Transmission implements OrdinalEnum{
+    public enum Transmission implements OrdinalEnum {
         MANUAL(10),
         AUTOMATIC(20);
 

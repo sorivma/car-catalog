@@ -8,6 +8,27 @@ import lombok.Setter;
 
 import java.time.LocalDateTime;
 
+/**
+ * Represents a vehicle.
+ * <p>
+ *     The annotations are:
+ *     <ul>
+ *         <li>{@link Entity} - the class is an entity</li>
+ *         <li>{@link Table} - the name of the table in the database</li>
+ *         <li>{@link Convert} - the {@link Category} enum is converted to its ordinal value and vice versa</li>
+ *         <li>{@link ManyToOne} - the relationship between the model and the brand is many to one</li>
+ *         <li>{@link Column} - the name of the column in the database</li>
+ *      </ul>
+ *      The fields are:
+ *      <ul>
+ *          <li>{@link String} name - the name of the model</li>
+ *          <li>{@link Category} category - the category of the model</li>
+ *          <li>{@link String} imageURL - the URL of the image of the model</li>
+ *          <li>{@link Integer} startYear - the year when the model was first produced</li>
+ *          <li>{@link Integer} endYear - the year when the model was last produced</li>
+ *          <li>{@link Brand} brand - the brand of the model</li>
+ *      </ul>
+ */
 @Entity
 @NoArgsConstructor
 @Getter

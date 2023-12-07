@@ -14,6 +14,7 @@ public class CarModelMapper implements Mapper<Model, ModelDTO> {
     public CarModelMapper(ModelMapper modelMapper) {
         this.modelMapper = modelMapper;
         TypeMap<Model, ModelDTO> modelPropertyMapper = modelMapper.createTypeMap(Model.class, ModelDTO.class);
+
         modelPropertyMapper.addMapping(
                 model -> model.getBrand().getName(),
                 ModelDTO::setBrandName

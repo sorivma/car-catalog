@@ -6,6 +6,7 @@ import com.example.carcatalog.mapper.Mapper;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
 
+
 @Component
 public class BrandMapper implements Mapper<Brand, BrandDTO> {
     private final ModelMapper modelMapper;

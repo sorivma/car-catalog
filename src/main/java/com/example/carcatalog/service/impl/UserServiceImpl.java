@@ -3,34 +3,40 @@ package com.example.carcatalog.service.impl;
 import com.example.carcatalog.dto.UserDTO;
 import com.example.carcatalog.entity.Role;
 import com.example.carcatalog.entity.User;
-import com.example.carcatalog.except.NoUsernameException;
-import com.example.carcatalog.except.UserDeactivatedException;
-import com.example.carcatalog.except.UserNotFoundException;
+import com.example.carcatalog.except.ClientErrorException;
 import com.example.carcatalog.mapper.Mapper;
-import com.example.carcatalog.repos.RoleRepository;
 import com.example.carcatalog.repos.UserRepository;
+import com.example.carcatalog.service.RoleService;
 import com.example.carcatalog.service.UserService;
-import jakarta.persistence.EntityNotFoundException;
+import com.example.carcatalog.utils.validation.ValidationUtil;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
 public class UserServiceImpl implements UserService {
-    private final UserRepository userRepository;
-    private final RoleRepository roleRepository;
+    private UserRepository userRepository;
+    private RoleService roleService;
     private final Mapper<User, UserDTO> userMapper;
+    private final ValidationUtil validator;
 
-    public UserServiceImpl(UserRepository userRepository, RoleRepository roleRepository, Mapper<User, UserDTO> userMapper) {
-        this.userRepository = userRepository;
-        this.roleRepository = roleRepository;
+    public UserServiceImpl(Mapper<User, UserDTO> userMapper, ValidationUtil validator) {
         this.userMapper = userMapper;
+        this.validator = validator;
     }
 
+    @Autowired
+    public void setUserRepository(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
+
+    @Autowired
+    public void setRoleRepository(RoleService roleService) {
+        this.roleService = roleService;
+    }
 
     @Override
     public List<UserDTO> findAll() {
@@ -43,59 +49,52 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDTO findById(UUID uuid) {
         return userMapper.toDTO(userRepository
-                .findById(uuid).orElseThrow(UserNotFoundException::new));
+                .findById(uuid).orElseThrow(() ->
+                        new ClientErrorException.EntityNotFoundException("User", "id", uuid.toString())));
     }
 
     @Override
     public UserDTO add(UserDTO dto) {
-        if (dto.getUsername() == null) {
-            throw new NoUsernameException();
-        }
-
         User user = userMapper.toModel(dto);
-        Optional<User> dbUser = userRepository.findByUsername(dto.getUsername());
+        user.setRole(roleService.findByName(Role.RoleName.USER));
         user.setIsActive(true);
-
-        if (dbUser.isPresent()) {
-            if (!dbUser.get().getIsActive()) {
-                throw new UserDeactivatedException();
-            }
-
-            user.setRole(dbUser.get().getRole());
-            user.setId(dbUser.get().getId());
-            user.setCreated(dbUser.get().getCreated());
-            user.setModified(LocalDateTime.now());
-            return userMapper.toDTO(userRepository.save(user));
-        }
-
-        user.setCreated(LocalDateTime.now());
-//        user.setModified(LocalDateTime.now());
-        user.setIsActive(true);
-        user.setRole(roleRepository
-                .findByName(Role.RoleName.USER)
-                .orElseThrow(() -> new EntityNotFoundException("No role with provided name")));
-
         return userMapper.toDTO(userRepository.save(user));
     }
 
     @Override
-    public void deactivate(String username) {
-        User user = userRepository
-                .findByUsername(username)
-                .orElseThrow(UserNotFoundException::new);
+    public List<UserDTO> addAll(List<UserDTO> dtoList) {
+        List<User> users = dtoList.stream().map(userMapper::toModel).toList();
+        return userRepository.saveAll(users).stream().map(userMapper::toDTO).toList();
+    }
 
+    @Override
+    public void deactivate(String username) {
+        User user = findEntityByUserName(username);
         user.setIsActive(!user.getIsActive());
         userRepository.save(user);
     }
 
     @Override
-    public UserDTO findByUserName(UserDTO userDTO) {
-        if (userDTO.getUsername() == null) {
-            throw new NoUsernameException();
-        }
+    public User findEntityByUserName(String username) {
+        return userRepository.findByUsername(username).orElseThrow(
+                () -> new ClientErrorException.EntityNotFoundException("User", "username", username));
+    }
 
-        return userMapper.toDTO(userRepository
-                .findByUsername(userDTO.getUsername())
-                .orElseThrow(UserNotFoundException::new));
+    @Override
+    public UserDTO update(UserDTO userDTO) {
+        User user = findEntityByUserName(userDTO.getUsername());
+        user.setFirstName(userDTO.getFirstName());
+        user.setLastName(userDTO.getLastName());
+        user.setPassword(userDTO.getPassword());
+        return userMapper.toDTO(userRepository.save(user));
+    }
+
+    @Override
+    public UserDTO findByUserName(String username) {
+        return userMapper.toDTO(findEntityByUserName(username));
+    }
+
+    public Boolean isUsernameTaken(String username) {
+        return userRepository.existsByUsername(username);
     }
 }

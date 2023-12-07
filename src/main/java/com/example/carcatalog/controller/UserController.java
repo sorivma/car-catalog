@@ -1,6 +1,7 @@
 package com.example.carcatalog.controller;
 
 import com.example.carcatalog.dto.UserDTO;
+import com.example.carcatalog.service.OfferService;
 import com.example.carcatalog.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,10 +17,16 @@ import java.util.UUID;
 @RequestMapping("/users")
 public class UserController {
     private UserService userService;
+    private OfferService offerService;
 
     @Autowired
     public void setUserService(UserService userService) {
         this.userService = userService;
+    }
+
+    @Autowired
+    public void setOfferService(OfferService offerService) {
+        this.offerService = offerService;
     }
 
     @GetMapping
@@ -29,34 +36,40 @@ public class UserController {
         return "users";
     }
 
-    @GetMapping("/{id}")
-    public String showUserDetails(@PathVariable UUID id,Model model) {
-        model.addAttribute("user", userService.findById(id));
+    @GetMapping("/{username}")
+    public String showUserDetails(@PathVariable String username,Model model) {
+        model.addAttribute("user", userService.findByUserName(username));
+        model.addAttribute("offers", offerService.getUserOffers(username));
         return "user-details";
     }
 
     @PostMapping("/adduser")
     public String addUser(@ModelAttribute("newUser") @Valid UserDTO userDTO, BindingResult result, Model model) {
         if (result.hasErrors()) {
-            model.addAttribute(userService.findAll());
+            model.addAttribute("users",userService.findAll());
             return "users";
         }
-
 
         userService.add(userDTO);
         return "redirect:/users";
     }
 
-    @PostMapping("/update/{id}")
-    public String updateUser(@PathVariable("id") UUID id, @Valid UserDTO userDTO,
-                             BindingResult result, Model model) {
+    @GetMapping("/edit/{username}")
+    public String showUpdateForm(@PathVariable("username") String username, Model model) {
+        UserDTO userDTO = userService.findByUserName(username);
+        model.addAttribute("user", userDTO);
+        return "update-user";
+    }
+
+    @PostMapping("/update/{username}")
+    public String updateUser(@PathVariable("username") String username, @Valid UserDTO userDTO, BindingResult result) {
         if (result.hasErrors()) {
-            System.out.println("errors");
-            return "users";
+            userDTO.setUsername(username);
+            return "update-user";
         }
 
-        userService.add(userDTO);
-        return "users";
+        userService.update(userDTO);
+        return "redirect:/users";
     }
 
     @PostMapping("/delete/{username}")

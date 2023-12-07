@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body style="background: #FFEFD5">
+<header class="error-header">
+    <div class="font-container">
+        <a href="/" class="home-href">
+            <div class="header-title">
+                <h1>Ошибка</h1>
+            </div>
+        </a>
+    </div>
+</header>
+<h1 th:text="${responseCode}" class="error-text"></h1><br>
+<h2 th:text="${exceptionDetails}" class="error-text"></h2>
+</body>
+</html>

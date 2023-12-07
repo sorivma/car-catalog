@@ -7,6 +7,26 @@ import lombok.Setter;
 
 import java.time.LocalDateTime;
 
+/**
+ * Represents a user.
+ * <p>
+ *     The annotations are:
+ *     <ul>
+ *         <li>{@link Entity} - the class is an entity</li>
+ *         <li>{@link Table} - the name of the table in the database</li>
+ *         <li>{@link ManyToOne} - the relationship between the user and the role is many to one</li>
+ *     </ul>
+ *     The fields are:
+ *     <ul>
+ *         <li>{@link Boolean} isActive - whether the user is active</li>
+ *         <li>{@link String} firstName - the first name of the user</li>
+ *         <li>{@link String} lastName - the last name of the user</li>
+ *         <li>{@link String} imageURL - the URL of the image of the user</li>
+ *         <li>{@link String} password - the password of the user</li>
+ *         <li>{@link String} username - the username of the user</li>
+ *         <li>{@link Role} role - the role of the user</li>
+ *     </ul>
+ */
 @Entity
 @NoArgsConstructor
 @Getter

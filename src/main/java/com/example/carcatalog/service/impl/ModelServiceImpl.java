@@ -1,36 +1,42 @@
 package com.example.carcatalog.service.impl;
 
 import com.example.carcatalog.dto.ModelDTO;
-import com.example.carcatalog.entity.Brand;
 import com.example.carcatalog.entity.Model;
-import com.example.carcatalog.except.BrandNotFoundException;
-import com.example.carcatalog.except.InvalidIdException;
-import com.example.carcatalog.except.ModelNotFoundException;
-import com.example.carcatalog.except.NoBrandNameException;
+import com.example.carcatalog.except.ClientErrorException;
 import com.example.carcatalog.mapper.impl.CarModelMapper;
 import com.example.carcatalog.repos.BrandRepository;
 import com.example.carcatalog.repos.ModelRepository;
 import com.example.carcatalog.service.ModelService;
+import com.example.carcatalog.utils.validation.ValidationUtil;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.swing.text.html.Option;
-import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
 public class ModelServiceImpl implements ModelService {
-    private final ModelRepository modelRepository;
-    private final BrandRepository brandRepository;
-
+    private ModelRepository modelRepository;
+    private BrandRepository brandRepository;
     private final CarModelMapper carModelMapper;
+    private final ValidationUtil validator;
 
-    public ModelServiceImpl(ModelRepository modelRepository, BrandRepository brandRepository, CarModelMapper carModelMapper) {
+    public ModelServiceImpl(ModelRepository modelRepository, CarModelMapper carModelMapper,
+                            ValidationUtil validator) {
         this.modelRepository = modelRepository;
-        this.brandRepository = brandRepository;
         this.carModelMapper = carModelMapper;
+        this.validator = validator;
+    }
+
+    @Autowired
+    public void setModelRepository(ModelRepository modelRepository) {
+        this.modelRepository = modelRepository;
+    }
+
+    @Autowired
+    public void setBrandRepository(BrandRepository brandRepository) {
+        this.brandRepository = brandRepository;
     }
 
     @Override
@@ -43,50 +49,32 @@ public class ModelServiceImpl implements ModelService {
 
     @Override
     public ModelDTO findById(UUID uuid) {
-        return carModelMapper.toDTO(modelRepository.findById(uuid).orElseThrow(ModelNotFoundException::new));
+        return carModelMapper.toDTO(finEntityById(uuid));
     }
 
     @Override
+    // TODO: make aspect for handling validation
     public ModelDTO add(ModelDTO dto) {
-        if (dto.getBrandName() == null) {
-            throw new NoBrandNameException();
-        }
-        if (dto.getName() == null) {
-            throw new IllegalArgumentException("No model name provided");
+        if (validator.isInvalid(dto)) {
+            throw new IllegalArgumentException("Invalid arguments: " + validator.violations(dto));
         }
 
         Model model = carModelMapper.toModel(dto);
-        if (model.getId() == null) {
-            model.setCreated(LocalDateTime.now());
-        }
-        model.setModified(LocalDateTime.now());
-        model.setBrand(brandRepository.findBrandByName(dto.getBrandName()).orElseThrow(BrandNotFoundException::new));
+        model.setBrand(brandRepository.findBrandByName(dto.getBrandName()).orElseThrow(
+                () -> new ClientErrorException.EntityNotFoundException("Brand", "name", dto.getBrandName())));
         return carModelMapper.toDTO(modelRepository.save(model));
     }
 
     @Override
-    public ModelDTO update(ModelDTO modelDTO) {
-        if (modelDTO.getId() == null) {
-            throw new IllegalArgumentException("ID shall be provided");
-        }
-        if (modelDTO.getBrandName() == null) {
-            throw new NoBrandNameException();
-        }
-        if (modelDTO.getName() == null) {
-            throw new IllegalArgumentException("No model name provided");
-        }
+    public List<ModelDTO> addAll(List<ModelDTO> dtoList) {
+        List<Model> models = dtoList.stream().map(carModelMapper::toModel).toList();
+        return modelRepository.saveAll(models).stream().map(carModelMapper::toDTO).toList();
+    }
 
-        Optional<Model> dbModel = modelRepository.findById(modelDTO.getId());
-        if (dbModel.isEmpty()) {
-            throw new ModelNotFoundException();
-        }
-
-        Model model = carModelMapper.toModel(modelDTO);
-        model.setCreated(dbModel.get().getCreated());
-        model.setModified(LocalDateTime.now());
-        model.setBrand(brandRepository.findBrandByName(modelDTO.getBrandName())
-                .orElseThrow(BrandNotFoundException::new));
-
-        return carModelMapper.toDTO(modelRepository.save(model));
+    @Override
+    public Model finEntityById(UUID modelUUID) {
+        return modelRepository.findById(modelUUID).orElseThrow(
+                () -> new ClientErrorException
+                        .EntityNotFoundException("Model", "id", modelUUID.toString()));
     }
 }

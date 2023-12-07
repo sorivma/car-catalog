@@ -14,6 +14,7 @@ public class UserMapper implements Mapper<User, UserDTO> {
     public UserMapper(ModelMapper modelMapper) {
         this.modelMapper = modelMapper;
         TypeMap<User, UserDTO> userPropertyMapper = modelMapper.createTypeMap(User.class, UserDTO.class);
+
         userPropertyMapper.addMapping(
                 user -> user.getRole().getName(),
                 UserDTO::setRoleName
