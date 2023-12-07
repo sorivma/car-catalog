@@ -14,7 +14,6 @@
 <div class="flex-box">
     <div class="row">
         <div class="content-title">Предложения</div>
-        <d
         <div th:each="offer : ${offers}" class="card">
             <a th:with="offerId=${offer.id}" th:href="@{'/offers/' + ${offerId}}">
                 <div class="card mb-3">
