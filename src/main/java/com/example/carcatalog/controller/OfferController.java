@@ -30,6 +30,11 @@ public class OfferController {
         this.offerService = offerService;
     }
 
+    @GetMapping("/{id}")
+    public String getModelOffers(@PathVariable("id") UUID id, Model model) {
+        model.addAttribute("offers", offerService.getModelOffers(id));
+        return "home";
+    }
 
     /**
      * Returns the offer page.
@@ -43,7 +48,7 @@ public class OfferController {
      * @param model the model
      * @return the offer page
      */
-    @GetMapping("/{id}")
+    @GetMapping("/details/{id}")
     public String offerPage(@PathVariable("id") UUID offerId, Model model) {
         model.addAttribute("offerModel",
                 offerService.getOfferViewModel(offerId));

@@ -15,7 +15,7 @@
     <div class="row">
         <div class="content-title">Предложения</div>
         <div th:each="offer : ${offers}" class="card">
-            <a th:with="offerId=${offer.id}" th:href="@{'/offers/' + ${offerId}}">
+            <a th:with="offerId=${offer.id}" th:href="@{'/offers/details/' + ${offerId}}">
                 <div class="card mb-3">
                     <img class="card-img-top" th:src="${offer.imageURL}">
                     <div class="" th:text="Описание + ' ' + ${offer.description}"></div>
@@ -27,8 +27,5 @@
         </div>
     </div>
 </div>
-<form th:action="@{/users}">
-    <button type="submit">Назад</button>
-</form>
 </body>
 </html>

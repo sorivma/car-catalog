@@ -14,25 +14,18 @@ import java.util.UUID;
 @Controller
 @RequestMapping("/models")
 public class ModelController {
-    private OfferService offerService;
     private ModelService modelService;
-
-    @Autowired
-    public void setOfferService(OfferService offerService) {
-        this.offerService = offerService;
-    }
 
     @Autowired
     public void setModelService(ModelService modelService) {
         this.modelService = modelService;
     }
 
-    @GetMapping("/{id}")
-    public String getModelOffers(@PathVariable("id") UUID id, Model model) {
-        model.addAttribute("offers", offerService.getModelOffers(id));
-        return "home";
+    @GetMapping("/brand/{brand_name}")
+    public String getBrandModels(@PathVariable("brand_name") String brandName, Model model) {
+        model.addAttribute("models", modelService.getBrandModels(brandName));
+        return "models";
     }
-
     @GetMapping("/all")
     public String brands(Model model){
         model.addAttribute("models", modelService.findAll());

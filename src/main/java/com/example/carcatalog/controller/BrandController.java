@@ -18,10 +18,9 @@ public class BrandController {
         this.brandService = brandService;
     }
 
-    @GetMapping("/models/{name}")
-    public String brandModels(@PathVariable("name") String name, Model model){
-        model.addAttribute("name", name);
-        model.addAttribute("models", brandService.findModelsByName(name));
-        return "models";
+    @GetMapping
+    public String brands(Model model){
+        model.addAttribute("brands", brandService.findAll());
+        return "brands";
     }
 }

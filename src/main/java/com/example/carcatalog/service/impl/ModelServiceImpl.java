@@ -77,4 +77,12 @@ public class ModelServiceImpl implements ModelService {
                 () -> new ClientErrorException
                         .EntityNotFoundException("Model", "id", modelUUID.toString()));
     }
+
+    @Override
+    public List<ModelDTO> getBrandModels(String brandName) {
+        return modelRepository.findByBrandName(brandName)
+                .stream()
+                .map(carModelMapper::toDTO)
+                .collect(Collectors.toList());
+    }
 }

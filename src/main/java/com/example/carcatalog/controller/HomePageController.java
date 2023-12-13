@@ -51,9 +51,4 @@ public class HomePageController {
         return "home";
     }
 
-    @GetMapping("/brands")
-    public String brands(Model model){
-        model.addAttribute("brands", brandService.findAll());
-        return "brands";
-    }
 }
