@@ -2,6 +2,9 @@ package com.example.carcatalog.controller;
 
 import com.example.carcatalog.service.BrandService;
 import com.example.carcatalog.service.OfferService;
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -10,15 +13,16 @@ import org.springframework.web.bind.annotation.GetMapping;
 /**
  * Home page controller
  * <p>
- *     This class is used to handle requests for the home page.
- *     <br>
- *     The requests are:
- *     <ul>
- *         GET / - returns the home page
- *     </ul>
+ * This class is used to handle requests for the home page.
+ * <br>
+ * The requests are:
+ * <ul>
+ *     GET / - returns the home page
+ * </ul>
  */
 @Controller
 public class HomePageController {
+    private static final Logger LOG = LogManager.getLogger(HomePageController.class);
     private OfferService offerService;
     private BrandService brandService;
 
@@ -35,17 +39,19 @@ public class HomePageController {
     /**
      * Returns the home page.
      * <p>
-     *     This method is used to handle GET requests for the home page.
-     *     <br>
-     *     The method returns the home page.
-     *     <br>
-     *     The method uses the {@link OfferService} to get all offers.
-     *     <br>
+     * This method is used to handle GET requests for the home page.
+     * <br>
+     * The method returns the home page.
+     * <br>
+     * The method uses the {@link OfferService} to get all offers.
+     * <br>
+     *
      * @param model the model
      * @return the home page
      */
     @GetMapping("/")
-    public String home(Model model){
+    public String home(Model model) {
+        LOG.log(Level.INFO, "Show home page");
         model.addAttribute("brands", brandService.findAll());
         model.addAttribute("offers", offerService.findAll());
         return "home";

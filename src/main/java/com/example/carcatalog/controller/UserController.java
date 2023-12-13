@@ -4,6 +4,9 @@ import com.example.carcatalog.dto.UserDTO;
 import com.example.carcatalog.service.OfferService;
 import com.example.carcatalog.service.UserService;
 import jakarta.validation.Valid;
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,6 +19,7 @@ import java.util.UUID;
 @Controller
 @RequestMapping("/users")
 public class UserController {
+    private static final Logger LOG = LogManager.getLogger(UserController.class);
     private UserService userService;
     private OfferService offerService;
 
@@ -31,6 +35,7 @@ public class UserController {
 
     @GetMapping
     public String showUsers(Model model) {
+        LOG.log(Level.INFO, "Show all users");
         model.addAttribute("users", userService.findAll());
         model.addAttribute("newUser", new UserDTO());
         return "users";
@@ -38,6 +43,7 @@ public class UserController {
 
     @GetMapping("/{username}")
     public String showUserDetails(@PathVariable String username,Model model) {
+        LOG.log(Level.INFO, "Show details for user: " + username);
         model.addAttribute("user", userService.findByUserName(username));
         model.addAttribute("offers", offerService.getUserOffers(username));
         return "user-details";
@@ -50,6 +56,7 @@ public class UserController {
             return "users";
         }
 
+        LOG.log(Level.INFO, "Add user with credentials: " + userDTO);
         userService.add(userDTO);
         return "redirect:/users";
     }

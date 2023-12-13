@@ -2,6 +2,9 @@ package com.example.carcatalog.controller;
 
 import com.example.carcatalog.service.ModelService;
 import com.example.carcatalog.service.OfferService;
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,6 +17,7 @@ import java.util.UUID;
 @Controller
 @RequestMapping("/models")
 public class ModelController {
+    private static final Logger LOG = LogManager.getLogger(ModelController.class);
     private ModelService modelService;
 
     @Autowired
@@ -23,11 +27,13 @@ public class ModelController {
 
     @GetMapping("/brand/{brand_name}")
     public String getBrandModels(@PathVariable("brand_name") String brandName, Model model) {
+        LOG.log(Level.INFO, "Get all models of brand: " + brandName);
         model.addAttribute("models", modelService.getBrandModels(brandName));
         return "models";
     }
     @GetMapping("/all")
-    public String brands(Model model){
+    public String models(Model model){
+        LOG.log(Level.INFO, "Get all models");
         model.addAttribute("models", modelService.findAll());
         return "models";
     }

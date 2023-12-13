@@ -1,6 +1,10 @@
 package com.example.carcatalog.controller;
 
 import com.example.carcatalog.service.OfferService;
+import lombok.extern.java.Log;
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,8 +26,8 @@ import java.util.UUID;
 @Controller
 @RequestMapping("/offers")
 public class OfferController {
-    protected OfferService offerService;
-
+    private static final Logger LOG = LogManager.getLogger(OfferController.class);
+    private OfferService offerService;
 
     @Autowired
     public void setOfferService(OfferService offerService) {
@@ -32,6 +36,7 @@ public class OfferController {
 
     @GetMapping("/{id}")
     public String getModelOffers(@PathVariable("id") UUID id, Model model) {
+        LOG.log(Level.INFO, "Get offers for model under id: " + id);
         model.addAttribute("offers", offerService.getModelOffers(id));
         return "home";
     }
@@ -50,6 +55,7 @@ public class OfferController {
      */
     @GetMapping("/details/{id}")
     public String offerPage(@PathVariable("id") UUID offerId, Model model) {
+        LOG.log(Level.INFO, "Get details for offer under id: " + offerId);
         model.addAttribute("offerModel",
                 offerService.getOfferViewModel(offerId));
 
@@ -58,6 +64,7 @@ public class OfferController {
 
     @GetMapping("/delete/{id}")
     public String deleteOffer(@PathVariable("id") UUID offerId, Model model) {
+        LOG.log(Level.INFO, "Delete offer under id: " + offerId);
         offerService.delete(offerId);
         return "redirect:/";
     }
