@@ -10,6 +10,7 @@ import com.example.carcatalog.service.RoleService;
 import com.example.carcatalog.service.UserService;
 import com.example.carcatalog.utils.validation.ValidationUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -90,6 +91,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Cacheable(value = "users", key = "#username")
     public UserDTO findByUserName(String username) {
         return userMapper.toDTO(findEntityByUserName(username));
     }

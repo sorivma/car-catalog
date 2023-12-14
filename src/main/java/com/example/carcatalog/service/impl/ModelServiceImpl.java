@@ -9,6 +9,8 @@ import com.example.carcatalog.repos.ModelRepository;
 import com.example.carcatalog.service.ModelService;
 import com.example.carcatalog.utils.validation.ValidationUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,6 +18,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
+@EnableCaching
 public class ModelServiceImpl implements ModelService {
     private ModelRepository modelRepository;
     private BrandRepository brandRepository;
@@ -40,6 +43,7 @@ public class ModelServiceImpl implements ModelService {
     }
 
     @Override
+    @Cacheable(value = "models")
     public List<ModelDTO> findAll() {
         return modelRepository.findAll()
                 .stream()
@@ -53,7 +57,6 @@ public class ModelServiceImpl implements ModelService {
     }
 
     @Override
-    // TODO: make aspect for handling validation
     public ModelDTO add(ModelDTO dto) {
         if (validator.isInvalid(dto)) {
             throw new IllegalArgumentException("Invalid arguments: " + validator.violations(dto));
@@ -79,6 +82,7 @@ public class ModelServiceImpl implements ModelService {
     }
 
     @Override
+    @Cacheable(value = "models", key = "#brandName")
     public List<ModelDTO> getBrandModels(String brandName) {
         return modelRepository.findByBrandName(brandName)
                 .stream()

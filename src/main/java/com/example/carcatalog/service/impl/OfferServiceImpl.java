@@ -13,6 +13,9 @@ import com.example.carcatalog.service.OfferService;
 import com.example.carcatalog.service.UserService;
 import com.example.carcatalog.utils.validation.ValidationUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,6 +23,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
+@EnableCaching
 public class OfferServiceImpl implements OfferService {
     private OfferRepository offerRepository;
     private ModelService modelService;
@@ -48,6 +52,7 @@ public class OfferServiceImpl implements OfferService {
     }
 
     @Override
+    @Cacheable("offers")
     public List<OfferDTO> findAll() {
         return offerRepository.findAllActive()
                 .stream()
@@ -92,6 +97,7 @@ public class OfferServiceImpl implements OfferService {
     }
 
     @Override
+    @Cacheable(value = "offer", key = "#id")
     public OfferViewModel getOfferViewModel(UUID id) {
         OfferDTO offerDTO = findById(id);
 
@@ -103,11 +109,13 @@ public class OfferServiceImpl implements OfferService {
     }
 
     @Override
+    @Cacheable(value = "modelOffers", key = "#id")
     public List<OfferDTO> getModelOffers(UUID id) {
         return findAll().stream().filter(offerDTO -> offerDTO.getModelUUID().equals(id)).toList();
     }
 
     @Override
+    @Cacheable(value = "userOffers", key = "#username")
     public List<OfferDTO> getUserOffers(String username) {
         return findAll().stream().filter(offerDTO -> offerDTO.getSellerUsername().equals(username)).toList();
     }

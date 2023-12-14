@@ -16,12 +16,14 @@
         <div class="content-title">Предложения</div>
         <div th:each="offer : ${offers}" class="card">
             <a th:with="offerId=${offer.id}" th:href="@{'/offers/details/' + ${offerId}}">
-                <div class="card mb-3">
-                    <img class="card-img-top" th:src="${offer.imageURL}">
-                    <div class="" th:text="Описание + ' ' + ${offer.description}"></div>
-                    <div th:text="Продавец + ' ' + ${offer.sellerUsername}"></div>
-                    <div th:text="Пробег + ' ' + ${offer.mileage}"></div>
-                    <div th:text="Цена + ' ' + ${offer.price}"></div>
+                <div class="col-md-3">
+                    <div class="card">
+                        <img class="card-img-top" th:src="${offer.imageURL}" width="200" height="150">
+                        <div class="" th:text="Описание + ' ' + ${offer.description}"></div>
+                        <div th:text="Продавец + ' ' + ${offer.sellerUsername}"></div>
+                        <div th:text="Пробег + ' ' + ${offer.mileage}"></div>
+                        <div th:text="Цена + ' ' + ${offer.price}"></div>
+                    </div>
                 </div>
             </a>
         </div>

@@ -17,7 +17,7 @@ public class WebSecurityConf {
                         authorizeHttpRequests -> authorizeHttpRequests
                                 .requestMatchers(PathRequest.toStaticResources().atCommonLocations())
                                 .permitAll()
-                                .requestMatchers("/", "/brands/**", "/offers/**", "/models/**", "/users/**")
+                                .anyRequest()
                                 .permitAll()
                 );
         return httpSecurity.build();

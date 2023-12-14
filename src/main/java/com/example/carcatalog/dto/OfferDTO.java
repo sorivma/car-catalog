@@ -1,11 +1,14 @@
 package com.example.carcatalog.dto;
 
 import com.example.carcatalog.entity.Offer;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.validation.constraints.Positive;
 import lombok.*;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.UUID;
 
@@ -28,7 +31,8 @@ import java.util.UUID;
 @Setter
 @ToString
 @Builder
-public class OfferDTO extends BaseDTO {
+@JsonIgnoreProperties(ignoreUnknown = true)
+public class OfferDTO extends BaseDTO implements Serializable {
     private String description;
     @Enumerated(EnumType.STRING)
     private Offer.Engine engine;

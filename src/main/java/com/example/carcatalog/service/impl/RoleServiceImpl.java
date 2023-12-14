@@ -12,6 +12,7 @@ import com.example.carcatalog.repos.UserRepository;
 import com.example.carcatalog.service.RoleService;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,6 +20,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
+@EnableCaching
 public class RoleServiceImpl implements RoleService {
     private RoleRepository roleRepository;
     private UserRepository userRepository;
@@ -83,6 +85,4 @@ public class RoleServiceImpl implements RoleService {
         return roleRepository.findByName(name).orElseThrow(
                 () -> new ClientErrorException.EntityNotFoundException("Role", "name", name.toString()));
     }
-
-
 }

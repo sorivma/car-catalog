@@ -11,6 +11,8 @@ import com.example.carcatalog.service.ModelService;
 import com.example.carcatalog.utils.validation.ValidationUtil;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.stereotype.Service;
 
 
@@ -19,6 +21,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
+@EnableCaching
 public class BrandServiceImpl implements BrandService {
     private final Mapper<Brand, BrandDTO> brandMapper;
     private final ValidationUtil validator;
@@ -41,6 +44,7 @@ public class BrandServiceImpl implements BrandService {
     }
 
     @Override
+    @Cacheable("brands")
     public List<BrandDTO> findAll() {
         return brandRepository
                 .findAll()
@@ -49,6 +53,7 @@ public class BrandServiceImpl implements BrandService {
     }
 
     @Override
+    @Cacheable(value = "brands", key = "#uuid")
     public BrandDTO findById(UUID uuid) {
         return brandMapper.toDTO(brandRepository
                 .findById(uuid)
@@ -58,7 +63,6 @@ public class BrandServiceImpl implements BrandService {
     }
 
     @Override
-    // TODO: make aspect for handling validation
     public BrandDTO add(BrandDTO dto) {
         if (validator.isInvalid(dto)) {
             throw new IllegalArgumentException("Invalid arguments provided");
@@ -85,6 +89,7 @@ public class BrandServiceImpl implements BrandService {
     }
 
     @Override
+    @Cacheable(value = "brandModels", key = "#name")
     public List<ModelDTO> findModelsByName(String name) {
         return modelService.findAll().stream().filter(modelDTO -> modelDTO.getBrandName().equals(name))
                 .collect(Collectors.toList());

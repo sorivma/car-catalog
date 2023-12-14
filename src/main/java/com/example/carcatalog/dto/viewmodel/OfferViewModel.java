@@ -17,4 +17,7 @@ public class OfferViewModel {
     private OfferDTO offerDTO;
     private UserDTO userDTO;
     private ModelDTO modelDTO;
+
+    public OfferViewModel() {
+    }
 }
