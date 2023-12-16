@@ -13,4 +13,7 @@ import java.util.UUID;
 public interface OfferRepository extends JpaRepository<Offer, UUID> {
     @Query("SELECT o FROM Offer o WHERE o.seller.isActive = true")
     List<Offer> findAllActive();
+
+    List<Offer> findAllByModelId(UUID modelId);
+    List<Offer> findAllBySellerUsername(String username);
 }

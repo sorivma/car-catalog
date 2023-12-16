@@ -17,7 +17,6 @@ import java.util.UUID;
 @Controller
 @RequestMapping("/models")
 public class ModelController {
-    private static final Logger LOG = LogManager.getLogger(ModelController.class);
     private ModelService modelService;
 
     @Autowired
@@ -27,13 +26,11 @@ public class ModelController {
 
     @GetMapping("/brand/{brand_name}")
     public String getBrandModels(@PathVariable("brand_name") String brandName, Model model) {
-        LOG.log(Level.INFO, "Get all models of brand: " + brandName);
         model.addAttribute("models", modelService.getBrandModels(brandName));
         return "models";
     }
     @GetMapping("/all")
     public String models(Model model){
-        LOG.log(Level.INFO, "Get all models");
         model.addAttribute("models", modelService.findAll());
         return "models";
     }

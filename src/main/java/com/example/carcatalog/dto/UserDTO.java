@@ -1,9 +1,6 @@
 package com.example.carcatalog.dto;
 
-import com.example.carcatalog.dto.BaseDTO;
 import com.example.carcatalog.entity.Role;
-import com.example.carcatalog.utils.validation.annotation.Username;
-import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.*;
 

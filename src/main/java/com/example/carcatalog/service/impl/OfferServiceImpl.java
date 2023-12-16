@@ -109,14 +109,18 @@ public class OfferServiceImpl implements OfferService {
     }
 
     @Override
-    @Cacheable(value = "modelOffers", key = "#id")
     public List<OfferDTO> getModelOffers(UUID id) {
-        return findAll().stream().filter(offerDTO -> offerDTO.getModelUUID().equals(id)).toList();
+        return offerRepository.findAllByModelId(id)
+                .stream()
+                .map(offerMapper::toDTO)
+                .collect(Collectors.toList());
     }
 
     @Override
-    @Cacheable(value = "userOffers", key = "#username")
     public List<OfferDTO> getUserOffers(String username) {
-        return findAll().stream().filter(offerDTO -> offerDTO.getSellerUsername().equals(username)).toList();
+        return offerRepository.findAllBySellerUsername(username)
+                .stream()
+                .map(offerMapper::toDTO)
+                .collect(Collectors.toList());
     }
 }

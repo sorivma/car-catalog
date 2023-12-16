@@ -6,9 +6,11 @@ import net.datafaker.Faker;
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.data.redis.cache.RedisCacheConfiguration;
 import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.RedisSerializationContext;
+import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 
 import java.time.Duration;
 
@@ -25,6 +27,7 @@ import java.time.Duration;
  *         <li>{@link Validator} - a jakarta validator for objects</li>
  */
 @Configuration
+@EnableAspectJAutoProxy
 public class AppBeanConfig {
     @Bean
     public Faker faker() {
@@ -37,9 +40,7 @@ public class AppBeanConfig {
     }
 
     @Bean
-    public Validator validator() {
-        return Validation
-                .buildDefaultValidatorFactory()
-                .getValidator();
+    public LocalValidatorFactoryBean validator() {
+        return new LocalValidatorFactoryBean();
     }
 }

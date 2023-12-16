@@ -2,6 +2,7 @@ package com.example.carcatalog.init.factory;
 
 import com.example.carcatalog.dto.UserDTO;
 import net.datafaker.Faker;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.util.HashSet;
@@ -15,9 +16,11 @@ import java.util.Set;
 public class UserFactory extends AbstractEntityFactory<UserDTO> {
     private final Faker faker;
     private final Set<String> usedUsernames = new HashSet<>();
+    private final PasswordEncoder passwordEncoder;
 
-    public UserFactory(Faker faker) {
+    public UserFactory(Faker faker, PasswordEncoder passwordEncoder) {
         this.faker = faker;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
@@ -30,7 +33,7 @@ public class UserFactory extends AbstractEntityFactory<UserDTO> {
         return UserDTO.builder()
                 .firstName(faker.name().firstName())
                 .lastName(faker.name().lastName())
-                .password(faker.internet().password())
+                .password(passwordEncoder.encode(faker.internet().password()))
                 .username(username)
                 .imageURL(faker.internet().image())
                 .build();

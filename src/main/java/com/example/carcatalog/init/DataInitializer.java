@@ -12,6 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -46,17 +47,19 @@ public class DataInitializer implements CommandLineRunner {
     private final BrandFactory brandFactory;
     private final ModelFactory modelFactory;
     private final OfferFactory offerFactory;
+    private final PasswordEncoder passwordEncoder;
     private final DataInitializerProperties dataInitializerProperties;
 
     public DataInitializer(UserFactory userFactory,
                            BrandFactory brandFactory,
                            ModelFactory modelFactory,
-                           OfferFactory offerFactory,
+                           OfferFactory offerFactory, PasswordEncoder passwordEncoder,
                            DataInitializerProperties dataInitializerProperties) {
         this.userFactory = userFactory;
         this.brandFactory = brandFactory;
         this.modelFactory = modelFactory;
         this.offerFactory = offerFactory;
+        this.passwordEncoder = passwordEncoder;
         this.dataInitializerProperties = dataInitializerProperties;
     }
 
@@ -99,6 +102,7 @@ public class DataInitializer implements CommandLineRunner {
         populateBrands();
         populateModels();
         populateOffers();
+        createTestUser();
     }
 
     private void populateRoles() {
@@ -144,5 +148,18 @@ public class DataInitializer implements CommandLineRunner {
         logger.info("Generated: {} offers", offerDTOS.size());
         offerDTOS.forEach(offerService::add);
         logger.info("Saved: {} offers", offerDTOS.size());
+    }
+
+    private void createTestUser() {
+        if (dataInitializerProperties.isTestUser()) {
+            logger.info("Generated test user with name: {} and password {}", dataInitializerProperties.getTestUsername(),
+                    dataInitializerProperties.getTestPassword());
+            userService.add(UserDTO.builder()
+                            .username(dataInitializerProperties.getTestUsername())
+                            .password(passwordEncoder.encode(dataInitializerProperties
+                                    .getTestPassword()))
+                    .build());
+            logger.info("Added test user");
+        }
     }
 }

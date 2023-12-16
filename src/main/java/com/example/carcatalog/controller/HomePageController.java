@@ -2,7 +2,6 @@ package com.example.carcatalog.controller;
 
 import com.example.carcatalog.service.BrandService;
 import com.example.carcatalog.service.OfferService;
-import com.example.carcatalog.service.RecentService;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -23,12 +22,8 @@ import org.springframework.web.bind.annotation.GetMapping;
  */
 @Controller
 public class HomePageController {
-    private static final Logger LOG = LogManager.getLogger(HomePageController.class);
     private OfferService offerService;
     private BrandService brandService;
-    @Autowired
-    private RecentService recentService;
-
     @Autowired
     public void setBrandService(BrandService brandService) {
         this.brandService = brandService;
@@ -54,7 +49,6 @@ public class HomePageController {
      */
     @GetMapping("/")
     public String home(Model model) {
-        LOG.log(Level.INFO, "Show home page");
         model.addAttribute("brands", brandService.findAll());
         model.addAttribute("offers", offerService.findAll());
         return "home";

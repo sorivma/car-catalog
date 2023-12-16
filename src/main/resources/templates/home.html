@@ -12,10 +12,10 @@
 <div th:replace="fragments/header :: header_normal"></div>
 <div class="flex-box">
     <div class="row">
-        <div class="content-title">Предложения</div>
-        <div th:each="offer : ${offers}" class="card">
-            <a th:with="offerId=${offer.id}" th:href="@{'/offers/details/' + ${offerId}}">
-                <div class="col-md-3">
+        <div>Предложения</div>
+        <div class="row row-cols-1 row-cols-md-4 g-4">
+            <div th:each="offer : ${offers}" class="col">
+                <a th:with="offerId=${offer.id}" th:href="@{'/offers/details/' + ${offerId}}" class="text-decoration-none">
                     <div class="card">
                         <img class="card-img-top" th:src="${offer.imageURL}" width="200" height="150">
                         <div class="" th:text="Описание + ' ' + ${offer.description}"></div>
@@ -23,8 +23,8 @@
                         <div th:text="Пробег + ' ' + ${offer.mileage}"></div>
                         <div th:text="Цена + ' ' + ${offer.price}"></div>
                     </div>
-                </div>
-            </a>
+                </a>
+            </div>
         </div>
     </div>
 </div>

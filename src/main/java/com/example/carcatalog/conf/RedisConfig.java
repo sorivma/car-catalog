@@ -2,6 +2,8 @@ package com.example.carcatalog.conf;
 
 import com.example.carcatalog.dto.OfferDTO;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.annotation.PostConstruct;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
@@ -45,6 +47,14 @@ public class RedisConfig {
                 .build();
     }
 
+    @Bean
+    public RedisTemplate<String, OfferDTO> redisTemplate(RedisConnectionFactory redisConnectionFactory){
+        RedisTemplate<String, OfferDTO> template = new RedisTemplate<>();
+        template.setConnectionFactory(redisConnectionFactory);
+        template.setDefaultSerializer(new GenericJackson2JsonRedisSerializer());
+        return template;
+    }
+
 
     private RedisCacheConfiguration myDefaultCacheConfig(Duration duration) {
         return RedisCacheConfiguration
@@ -52,15 +62,5 @@ public class RedisConfig {
                 .entryTtl(duration)
                 .serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(
                         new GenericJackson2JsonRedisSerializer()));
-    }
-
-    @Bean
-    public RedisTemplate<String, OfferDTO> redisTemplate(RedisConnectionFactory connectionFactory) {
-        RedisTemplate<String, OfferDTO> redisTemplate = new RedisTemplate<>();
-        redisTemplate.setConnectionFactory(connectionFactory);
-        redisTemplate.setKeySerializer(new StringRedisSerializer());
-        Jackson2JsonRedisSerializer<OfferDTO> jsonSerializer = new Jackson2JsonRedisSerializer<>(OfferDTO.class);
-        redisTemplate.setValueSerializer(jsonSerializer);
-        return redisTemplate;
     }
 }

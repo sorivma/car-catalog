@@ -12,8 +12,8 @@ import java.lang.annotation.Target;
 @Constraint(validatedBy = UsernameValidator.class)
 @Target({ElementType.FIELD})
 @Retention(RetentionPolicy.RUNTIME)
-public @interface Username {
-    String message() default "Invalid username";
+public @interface UniqueUsername {
+    String message() default "Имя пользователя уже занято";
     Class<?>[] groups() default {};
     Class<? extends Payload>[] payload() default {};
 }

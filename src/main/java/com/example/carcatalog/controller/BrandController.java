@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 @RequestMapping("/brands")
 public class BrandController {
-    private static final Logger LOG = LogManager.getLogger(BrandController.class);
     private BrandService brandService;
 
     @Autowired
@@ -25,7 +24,6 @@ public class BrandController {
 
     @GetMapping
     public String brands(Model model){
-        LOG.log(Level.INFO, "Get all brands");
         model.addAttribute("brands", brandService.findAll());
         return "brands";
     }

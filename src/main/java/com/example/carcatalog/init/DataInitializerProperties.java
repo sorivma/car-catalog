@@ -27,4 +27,7 @@ public class DataInitializerProperties {
     private Integer brandNum = 64;
     private Integer modelNum = 100;
     private Integer offerNum = 100;
+    private boolean testUser = false;
+    private String testUsername = "sorivma";
+    private String testPassword = "admin";
 }

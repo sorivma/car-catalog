@@ -60,6 +60,6 @@ public class User extends AuditBaseEntity {
     private String password;
     @Column(unique = true, nullable = false)
     private String username;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     private Role role;
 }

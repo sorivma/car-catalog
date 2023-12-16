@@ -1,5 +1,6 @@
 package com.example.carcatalog.service.impl;
 
+import com.example.carcatalog.dto.RegistrationDTO;
 import com.example.carcatalog.dto.UserDTO;
 import com.example.carcatalog.entity.Role;
 import com.example.carcatalog.entity.User;
@@ -11,6 +12,7 @@ import com.example.carcatalog.service.UserService;
 import com.example.carcatalog.utils.validation.ValidationUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -22,10 +24,12 @@ public class UserServiceImpl implements UserService {
     private UserRepository userRepository;
     private RoleService roleService;
     private final Mapper<User, UserDTO> userMapper;
+    private final PasswordEncoder passwordEncoder;
     private final ValidationUtil validator;
 
-    public UserServiceImpl(Mapper<User, UserDTO> userMapper, ValidationUtil validator) {
+    public UserServiceImpl(Mapper<User, UserDTO> userMapper, PasswordEncoder passwordEncoder, ValidationUtil validator) {
         this.userMapper = userMapper;
+        this.passwordEncoder = passwordEncoder;
         this.validator = validator;
     }
 
@@ -98,5 +102,18 @@ public class UserServiceImpl implements UserService {
 
     public Boolean isUsernameTaken(String username) {
         return userRepository.existsByUsername(username);
+    }
+
+    @Override
+    public void register(RegistrationDTO registrationDTO) {
+        User user = new User();
+        user.setUsername(registrationDTO.getUsername());
+        user.setRole(roleService.findByName(Role.RoleName.USER));
+        user.setPassword(passwordEncoder.encode(registrationDTO.getPassword()));
+        user.setIsActive(true);
+        user.setFirstName(registrationDTO.getFirstName());
+        user.setLastName(registrationDTO.getLastName());
+        user.setImageURL(registrationDTO.getImageURL());
+        userRepository.save(user);
     }
 }

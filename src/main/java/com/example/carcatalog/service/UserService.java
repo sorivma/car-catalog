@@ -1,5 +1,6 @@
 package com.example.carcatalog.service;
 
+import com.example.carcatalog.dto.RegistrationDTO;
 import com.example.carcatalog.dto.UserDTO;
 import com.example.carcatalog.entity.User;
 import com.example.carcatalog.except.ClientErrorException;
@@ -47,4 +48,6 @@ public interface UserService extends BaseService<UserDTO, UUID> {
      * @return true if the username is taken, false otherwise
      */
     Boolean isUsernameTaken(String username);
+
+    void register(RegistrationDTO registrationDTO);
 }

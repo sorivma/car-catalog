@@ -1,5 +1,6 @@
 package com.example.carcatalog.controller;
 
+import com.example.carcatalog.dto.RegistrationDTO;
 import com.example.carcatalog.dto.UserDTO;
 import com.example.carcatalog.service.OfferService;
 import com.example.carcatalog.service.UserService;
@@ -14,12 +15,12 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 
+import java.security.Principal;
 import java.util.UUID;
 
 @Controller
 @RequestMapping("/users")
 public class UserController {
-    private static final Logger LOG = LogManager.getLogger(UserController.class);
     private UserService userService;
     private OfferService offerService;
 
@@ -35,7 +36,6 @@ public class UserController {
 
     @GetMapping
     public String showUsers(Model model) {
-        LOG.log(Level.INFO, "Show all users");
         model.addAttribute("users", userService.findAll());
         model.addAttribute("newUser", new UserDTO());
         return "users";
@@ -43,45 +43,33 @@ public class UserController {
 
     @GetMapping("/{username}")
     public String showUserDetails(@PathVariable String username,Model model) {
-        LOG.log(Level.INFO, "Show details for user: " + username);
         model.addAttribute("user", userService.findByUserName(username));
         model.addAttribute("offers", offerService.getUserOffers(username));
         return "user-details";
     }
 
-    @PostMapping("/adduser")
-    public String addUser(@ModelAttribute("newUser") @Valid UserDTO userDTO, BindingResult result, Model model) {
-        if (result.hasErrors()) {
-            model.addAttribute("users",userService.findAll());
-            return "users";
-        }
-
-        LOG.log(Level.INFO, "Add user with credentials: " + userDTO);
-        userService.add(userDTO);
-        return "redirect:/users";
-    }
-
-    @GetMapping("/edit/{username}")
-    public String showUpdateForm(@PathVariable("username") String username, Model model) {
-        UserDTO userDTO = userService.findByUserName(username);
+    @GetMapping("/dashboard")
+    public String showDashboard(Model model, Principal principal) {
+        UserDTO userDTO = userService.findByUserName(principal.getName());
         model.addAttribute("user", userDTO);
-        return "update-user";
+        return "dashboard";
     }
 
-    @PostMapping("/update/{username}")
-    public String updateUser(@PathVariable("username") String username, @Valid UserDTO userDTO, BindingResult result) {
-        if (result.hasErrors()) {
-            userDTO.setUsername(username);
-            return "update-user";
+    @GetMapping("/registration")
+    public String showRegForm(Model model) {
+        model.addAttribute("registrationDTO", new RegistrationDTO());
+        return "registration";
+    }
+
+    @PostMapping("/register")
+    public String register(@Valid @ModelAttribute("registrationDTO") RegistrationDTO registrationDTO,
+                           BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return "registration";
         }
 
-        userService.update(userDTO);
-        return "redirect:/users";
-    }
+        userService.register(registrationDTO);
 
-    @PostMapping("/delete/{username}")
-    public String deleteUser(@PathVariable("username") String username, Model model) {
-        userService.deactivate(username);
-        return "redirect:/users";
+        return "redirect:/login";
     }
 }
