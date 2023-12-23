@@ -11,7 +11,36 @@
 <body>
 <div th:replace="fragments/header :: header_normal"></div>
 <div>
-    <div th:text="'Здравствуйте' + ' ' + ${user.getUsername()}"></div>
+    <section class="container">
+        <div class="text-center">
+            <img th:src="${user.imageURL}" class="img-fluid rounded-circle mb-3" alt="Avatar" width="100px" height="100px">
+            <h2 th:text="${user.username}"></h2>
+            <div th:text="${user.firstName} + ' ' + ${user.lastName}"></div>
+        </div>
+    </section>
+    <div class="menu-container mt-4">
+        <div class="row">
+            <div class="col-md-6">
+                <ul class="list-group">
+                    <li class="list-group-item">
+                        <a th:href="@{/users/edit-profile}" class="nav-link">Изменить профиль</a>
+                    </li>
+                    <li class="list-group-item">
+                        <a th:href="@{/offers/create-offer}" class="nav-link">Создать объявление</a>
+                    </li>
+                    <li class="list-group-item">
+                        <a th:href="@{'/users/' + ${user.username}}" class="nav-link">Мои объявления</a>
+                    </li>
+                    <li class="list-group-item">
+                        <a th:href="@{/users/edit-password}" class="nav-link">Изменить пароль</a>
+                    </li>
+                    <li class="list-group-item">
+                        <a th:href="@{/users/edit-username}" class="nav-link">Изменить имя пользователя</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
 </div>
 </body>
 </html>

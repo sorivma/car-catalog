@@ -20,7 +20,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userService.findEntityByUserName(username);
-        String role = user.getRole().toString();
+        String role = user.getRole().getName().toString();
         return org.springframework.security.core.userdetails.User
                 .withUsername(username)
                 .password(user.getPassword())

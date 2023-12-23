@@ -20,10 +20,7 @@ public class WebSecurityConf {
                         authorizeHttpRequests -> authorizeHttpRequests
                                 .requestMatchers(PathRequest.toStaticResources().atCommonLocations())
                                 .permitAll()
-
                                 .requestMatchers(HttpMethod.POST, "users/register").permitAll()
-
-                                .anyRequest().permitAll()
                 );
 
         httpSecurity
@@ -35,7 +32,15 @@ public class WebSecurityConf {
                 .logout()
                 .logoutSuccessUrl("/");
 
-
+        httpSecurity.authorizeHttpRequests()
+                .requestMatchers("/").permitAll()
+                .requestMatchers("/offers/").permitAll()
+                .requestMatchers("/offers/details/**").permitAll()
+                .requestMatchers("/offers/add").authenticated()
+                .requestMatchers("/offers/edit/**").authenticated()
+                .requestMatchers("/offers/delete/**").authenticated()
+                .requestMatchers("/admin/**").hasRole("ADMIN")
+                .requestMatchers("/users/**").authenticated();
         return httpSecurity.build();
     }
 

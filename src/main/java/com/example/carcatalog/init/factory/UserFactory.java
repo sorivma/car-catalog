@@ -1,5 +1,6 @@
 package com.example.carcatalog.init.factory;
 
+import com.example.carcatalog.dto.RegistrationDTO;
 import com.example.carcatalog.dto.UserDTO;
 import net.datafaker.Faker;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -13,7 +14,7 @@ import java.util.Set;
  * @see AbstractEntityFactory
  */
 @Component
-public class UserFactory extends AbstractEntityFactory<UserDTO> {
+public class UserFactory extends AbstractEntityFactory<RegistrationDTO> {
     private final Faker faker;
     private final Set<String> usedUsernames = new HashSet<>();
     private final PasswordEncoder passwordEncoder;
@@ -24,16 +25,16 @@ public class UserFactory extends AbstractEntityFactory<UserDTO> {
     }
 
     @Override
-    public UserDTO getEntity() {
+    public RegistrationDTO getEntity() {
         String username;
         do {
             username = faker.name().username().split("\\.")[0];
         } while (!usedUsernames.add(username));
 
-        return UserDTO.builder()
+        return RegistrationDTO.builder()
                 .firstName(faker.name().firstName())
                 .lastName(faker.name().lastName())
-                .password(passwordEncoder.encode(faker.internet().password()))
+                .password(faker.internet().password())
                 .username(username)
                 .imageURL(faker.internet().image())
                 .build();

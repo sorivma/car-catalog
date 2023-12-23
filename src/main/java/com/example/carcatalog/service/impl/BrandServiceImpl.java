@@ -11,6 +11,7 @@ import com.example.carcatalog.service.ModelService;
 import com.example.carcatalog.utils.validation.ValidationUtil;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.stereotype.Service;
@@ -63,10 +64,8 @@ public class BrandServiceImpl implements BrandService {
     }
 
     @Override
+    @CacheEvict(value = "brands", allEntries = true)
     public BrandDTO add(BrandDTO dto) {
-        if (validator.isInvalid(dto)) {
-            throw new IllegalArgumentException("Invalid arguments provided");
-        }
         Brand brand = brandMapper.toModel(dto);
         return brandMapper.toDTO(brandRepository.save(brand));
     }
@@ -84,6 +83,7 @@ public class BrandServiceImpl implements BrandService {
     }
 
     @Override
+    @CacheEvict(value = "brands", allEntries = true)
     public void delete(UUID id) throws EntityNotFoundException {
         brandRepository.deleteById(id);
     }

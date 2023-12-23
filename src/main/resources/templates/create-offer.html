@@ -1,0 +1,81 @@
+<!-- create-offer.html -->
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Offer</title>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css">
+</head>
+<body>
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+
+            <h2 class="mb-4">Create Offer</h2>
+
+            <form action="/offers/create-offer" method="post" th:object="${offer}">
+                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+
+                <div th:if="${#fields.hasErrors('*')}" class="alert alert-danger">
+                    <strong>Ошибка!</strong> Исправьте следующие ошибки:
+                    <ul>
+                        <li th:each="error : ${#fields.errors('*')}" th:text="${error}"></li>
+                    </ul>
+                </div>
+
+                <div class="mb-3">
+                    <label for="modelId" class="form-label">Model:</label>
+                    <select id="modelId" name="modelId" class="form-select" th:field="*{modelUUID}" required>
+                        <option th:each="model : ${availableModels}" th:value="${model.id}" th:text="${model.name}">
+                        </option>
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label for="engineType" class="form-label">Engine Type:</label>
+                    <select id="engineType" name="engineType" class="form-select" th:field="*{engine}" required>
+                        <option th:each="type : ${T(com.example.carcatalog.entity.Offer.Engine).values()}" th:value="${type}" th:text="${type}"></option>
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label for="transmissionType" class="form-label">Transmission Type:</label>
+                    <select id="transmissionType" name="transmissionType" class="form-select" th:field="*{transmission}" required>
+                        <option th:each="type : ${T(com.example.carcatalog.entity.Offer.Transmission).values()}" th:value="${type}" th:text="${type}"></option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label for="year" class="form-label">Year:</label>
+                    <input type="text" id="year" name="year" class="form-control" th:field="*{year}" required />
+                </div>
+
+                <div class="mb-3">
+                    <label for="mileage" class="form-label">Mileage:</label>
+                    <input type="text" id="mileage" name="mileage" class="form-control" th:field="*{mileage}" required />
+                </div>
+
+                <div class="mb-3">
+                    <label for="description" class="form-label">Description:</label>
+                    <textarea id="description" name="description" class="form-control" th:field="*{description}" rows="4" required></textarea>
+                </div>
+
+                <div class="mb-3">
+                    <label for="price" class="form-label">Price:</label>
+                    <input type="number" id="price" name="price" class="form-control" th:field="*{price}" required />
+                </div>
+
+                <div class="mb-3">
+                    <label for="imageUrl" class="form-label">Image URL:</label>
+                    <input type="text" id="imageUrl" name="imageUrl" class="form-control" th:field="*{imageURL}" required />
+                </div>
+                <button type="submit" class="btn btn-primary">Create Offer</button>
+            </form>
+
+        </div>
+    </div>
+</div>
+</body>
+</html>

@@ -2,12 +2,11 @@ package com.example.carcatalog.controller;
 
 import com.example.carcatalog.dto.RegistrationDTO;
 import com.example.carcatalog.dto.UserDTO;
+import com.example.carcatalog.dto.form.PasswordUpdateForm;
+import com.example.carcatalog.dto.form.UsernameUpdateForm;
 import com.example.carcatalog.service.OfferService;
 import com.example.carcatalog.service.UserService;
 import jakarta.validation.Valid;
-import org.apache.logging.log4j.Level;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,7 +15,6 @@ import org.springframework.web.bind.annotation.*;
 
 
 import java.security.Principal;
-import java.util.UUID;
 
 @Controller
 @RequestMapping("/users")
@@ -38,7 +36,7 @@ public class UserController {
     public String showUsers(Model model) {
         model.addAttribute("users", userService.findAll());
         model.addAttribute("newUser", new UserDTO());
-        return "users";
+        return "users-table";
     }
 
     @GetMapping("/{username}")
@@ -71,5 +69,64 @@ public class UserController {
         userService.register(registrationDTO);
 
         return "redirect:/login";
+    }
+
+    @GetMapping("/edit-profile")
+    public String showEditProfile(Model model, Principal principal) {
+        UserDTO userDTO = userService.findByUserName(principal.getName());
+        model.addAttribute("user", userDTO);
+        return "edit-profile";
+    }
+
+    @PostMapping("/edit-profile")
+    public String editProfile(@Valid @ModelAttribute("user") UserDTO userDTO,
+                              BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return "edit-profile";
+        }
+
+        userService.update(userDTO);
+
+        return "redirect:/users/dashboard";
+    }
+
+    @GetMapping("/edit-password")
+    public String showEditPassword(Model model) {
+        model.addAttribute("passwordUpdateForm", new PasswordUpdateForm());
+        return "edit-password";
+    }
+
+    @PostMapping("/edit-password")
+    public String editPassword(@Valid @ModelAttribute("passwordUpdateForm" ) PasswordUpdateForm passwordUpdateForm,
+                              Principal principal,
+                              BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return "edit-password";
+        }
+
+        userService.updatePassword(principal.getName(), passwordUpdateForm.getOldPassword(), passwordUpdateForm.getNewPassword());
+
+        return "redirect:/users/dashboard";
+    }
+
+    @GetMapping("/edit-username")
+    public String showEditUsername(Model model) {
+        model.addAttribute("newUsername", new UsernameUpdateForm());
+        return "edit-username";
+    }
+
+    @PostMapping("/edit-username")
+    public String editUsername(@Valid @ModelAttribute("newUsername") UsernameUpdateForm username,
+                                 BindingResult bindingResult,
+                              Principal principal) {
+
+        if (bindingResult.hasErrors()) {
+            return "edit-username";
+        }
+
+        userService.updateUsername(principal.getName(), username.getUsername());
+
+
+        return "redirect:/logout";
     }
 }

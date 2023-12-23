@@ -52,7 +52,6 @@ public class OfferServiceImpl implements OfferService {
     }
 
     @Override
-    @Cacheable("offers")
     public List<OfferDTO> findAll() {
         return offerRepository.findAllActive()
                 .stream()
@@ -69,7 +68,6 @@ public class OfferServiceImpl implements OfferService {
     }
 
     @Override
-    // TODO: make aspect for handling validation
     public OfferDTO add(OfferDTO dto) {
         if (validator.isInvalid(dto)) {
             throw new IllegalArgumentException("Invalid arguments: " + validator.violations(dto));
@@ -92,6 +90,7 @@ public class OfferServiceImpl implements OfferService {
     }
 
     @Override
+    @CacheEvict(value = "offers")
     public void delete(UUID id) {
         offerRepository.deleteById(id);
     }
@@ -122,5 +121,24 @@ public class OfferServiceImpl implements OfferService {
                 .stream()
                 .map(offerMapper::toDTO)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    @CacheEvict(value = "offers")
+    public OfferDTO update(OfferDTO dto) {
+        Offer offer = offerRepository.findById(dto.getId()).orElseThrow(
+                () -> new ClientErrorException.EntityNotFoundException("Offer", "id", dto.getId().toString())
+        );
+
+        offer.setPrice(dto.getPrice());
+        offer.setYear(dto.getYear());
+        offer.setMileage(dto.getMileage());
+        offer.setDescription(dto.getDescription());
+        offer.setImageURL(dto.getImageURL());
+        offer.setTransmission(dto.getTransmission());
+        offer.setEngine(dto.getEngine());
+
+
+        return offerMapper.toDTO(offerRepository.save(offer));
     }
 }

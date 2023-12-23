@@ -3,6 +3,7 @@ package com.example.carcatalog.dto;
 import com.example.carcatalog.entity.Model;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.*;
 
@@ -28,7 +29,7 @@ import lombok.*;
 @ToString
 @Builder
 public class ModelDTO extends BaseDTO{
-    @NotEmpty
+    @NotBlank
     private String name;
     @Enumerated(EnumType.STRING)
     private Model.Category category;

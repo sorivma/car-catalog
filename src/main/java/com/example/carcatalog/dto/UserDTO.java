@@ -27,8 +27,6 @@ public class UserDTO extends BaseDTO {
     @NotEmpty
     private String username;
     @NotEmpty
-    private String password;
-    @NotEmpty
     private String firstName;
     private String lastName;
     private Boolean isActive;

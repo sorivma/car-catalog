@@ -50,4 +50,8 @@ public interface UserService extends BaseService<UserDTO, UUID> {
     Boolean isUsernameTaken(String username);
 
     void register(RegistrationDTO registrationDTO);
+
+    void updatePassword(String username, String password, String newPassword);
+
+    void updateUsername(String username, String newUsername);
 }

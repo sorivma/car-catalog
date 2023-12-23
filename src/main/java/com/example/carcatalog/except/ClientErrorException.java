@@ -29,4 +29,17 @@ public abstract class ClientErrorException extends RuntimeException {
             super(MESSAGE, entityName, fieldName, providedValue);
         }
     }
+
+    public static class ProhibitedActionException extends ClientErrorException {
+        private static final String MESSAGE = "You are not allowed to %s this %s";
+
+        /**
+         * Constructor.
+         * @param action - the action that is prohibited
+         * @param entityName - the name of the entity that is prohibited
+         */
+        public ProhibitedActionException(String action, String entityName) {
+            super(MESSAGE, action, entityName);
+        }
+    }
 }

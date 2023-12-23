@@ -26,8 +26,16 @@ public class GlobalExceptionHandler {
      */
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(ClientErrorException.EntityNotFoundException.class)
-    public String handleException(ClientErrorException e, Model model) {
+    public String handleNotFound(ClientErrorException e, Model model) {
         model.addAttribute("responseCode", 404);
+        model.addAttribute("exceptionDetails", e.getMessage());
+        return "error_page";
+    }
+
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    @ExceptionHandler(ClientErrorException.ProhibitedActionException.class)
+    public String handleForbidden(ClientErrorException e, Model model) {
+        model.addAttribute("responseCode", 403);
         model.addAttribute("exceptionDetails", e.getMessage());
         return "error_page";
     }

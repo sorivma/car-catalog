@@ -27,4 +27,6 @@ public interface OfferService extends BaseService<OfferDTO, UUID>{
 
     List<OfferDTO> getModelOffers(UUID id);
     List<OfferDTO> getUserOffers(String username);
+
+    OfferDTO update(OfferDTO dto);
 }

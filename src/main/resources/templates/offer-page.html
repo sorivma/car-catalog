@@ -42,6 +42,12 @@
                 <img th:src="${offerModel.userDTO.imageURL}" class="model-picture">
             </a>
         </div>
+        <div class="card">
+            <div th:if="${#authorization.expression('isAuthenticated()')} and ${offerModel.userDTO.username == #authentication.name}">
+                <a th:href="@{'/offers/edit/' + ${offerModel.offerDTO.id}}" class="btn btn-primary">Изменить</a>
+                <a th:href="@{'/offers/delete/' + ${offerModel.offerDTO.id}}" class="btn btn-danger">Удалить</a>
+            </div>
+        </div>
     </section>
 </div>
 </body>

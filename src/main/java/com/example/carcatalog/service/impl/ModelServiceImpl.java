@@ -9,6 +9,7 @@ import com.example.carcatalog.repos.ModelRepository;
 import com.example.carcatalog.service.ModelService;
 import com.example.carcatalog.utils.validation.ValidationUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.stereotype.Service;
@@ -57,6 +58,7 @@ public class ModelServiceImpl implements ModelService {
     }
 
     @Override
+    @CacheEvict(value = "models", allEntries = true)
     public ModelDTO add(ModelDTO dto) {
         if (validator.isInvalid(dto)) {
             throw new IllegalArgumentException("Invalid arguments: " + validator.violations(dto));

@@ -10,7 +10,9 @@ import com.example.carcatalog.repos.UserRepository;
 import com.example.carcatalog.service.RoleService;
 import com.example.carcatalog.service.UserService;
 import com.example.carcatalog.utils.validation.ValidationUtil;
+import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -25,12 +27,10 @@ public class UserServiceImpl implements UserService {
     private RoleService roleService;
     private final Mapper<User, UserDTO> userMapper;
     private final PasswordEncoder passwordEncoder;
-    private final ValidationUtil validator;
 
-    public UserServiceImpl(Mapper<User, UserDTO> userMapper, PasswordEncoder passwordEncoder, ValidationUtil validator) {
+    public UserServiceImpl(Mapper<User, UserDTO> userMapper, PasswordEncoder passwordEncoder) {
         this.userMapper = userMapper;
         this.passwordEncoder = passwordEncoder;
-        this.validator = validator;
     }
 
     @Autowired
@@ -73,6 +73,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @CacheEvict(value = "users", key = "#username")
     public void deactivate(String username) {
         User user = findEntityByUserName(username);
         user.setIsActive(!user.getIsActive());
@@ -86,11 +87,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @CacheEvict(value = "users", key = "#userDTO.username")
     public UserDTO update(UserDTO userDTO) {
         User user = findEntityByUserName(userDTO.getUsername());
         user.setFirstName(userDTO.getFirstName());
         user.setLastName(userDTO.getLastName());
-        user.setPassword(userDTO.getPassword());
         return userMapper.toDTO(userRepository.save(user));
     }
 
@@ -114,6 +115,25 @@ public class UserServiceImpl implements UserService {
         user.setFirstName(registrationDTO.getFirstName());
         user.setLastName(registrationDTO.getLastName());
         user.setImageURL(registrationDTO.getImageURL());
+        userRepository.save(user);
+    }
+
+
+    @Override
+    @CacheEvict(value = "users", key = "#username")
+    public void updatePassword(String username, String password, String newPassword)  {
+        User user = findEntityByUserName(username);
+        if (passwordEncoder.matches(password, user.getPassword())) {
+            user.setPassword(passwordEncoder.encode(newPassword));
+            userRepository.save(user);
+        }
+    }
+
+    @Override
+    @CacheEvict(value = "users", key = "#username")
+    public void updateUsername(String username, String newUsername) {
+        User user = findEntityByUserName(username);
+        user.setUsername(newUsername);
         userRepository.save(user);
     }
 }

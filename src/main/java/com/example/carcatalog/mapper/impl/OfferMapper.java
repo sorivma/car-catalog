@@ -1,6 +1,7 @@
 package com.example.carcatalog.mapper.impl;
 
 import com.example.carcatalog.dto.OfferDTO;
+import com.example.carcatalog.entity.BaseEntity;
 import com.example.carcatalog.entity.Offer;
 import com.example.carcatalog.mapper.Mapper;
 import org.modelmapper.ModelMapper;
@@ -15,7 +16,7 @@ public class OfferMapper implements Mapper<Offer, OfferDTO> {
     public OfferMapper(ModelMapper modelMapper) {
         this.modelMapper = modelMapper;
         TypeMap<Offer, OfferDTO> offerPropertyMapper = modelMapper.createTypeMap(Offer.class, OfferDTO.class);
-
+        TypeMap<OfferDTO, Offer> offerPropertyMapperRev = modelMapper.createTypeMap(OfferDTO.class, Offer.class);
         offerPropertyMapper.addMapping(
                 offer -> offer.getSeller().getUsername(),
                 OfferDTO::setSellerUsername
@@ -24,6 +25,16 @@ public class OfferMapper implements Mapper<Offer, OfferDTO> {
         offerPropertyMapper.addMapping(
                 offer -> offer.getModel().getId(),
                 OfferDTO::setModelUUID
+        );
+
+        offerPropertyMapper.addMapping(
+                Offer::getId,
+                OfferDTO::setId
+        );
+
+        offerPropertyMapperRev.addMapping(
+                OfferDTO::getId,
+                Offer::setId
         );
     }
 

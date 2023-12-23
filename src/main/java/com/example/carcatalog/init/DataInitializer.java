@@ -119,10 +119,10 @@ public class DataInitializer implements CommandLineRunner {
     }
 
     private void populateUsers() {
-        List<UserDTO> userDTOS = userFactory.getEntities(dataInitializerProperties
+        List<RegistrationDTO> userDTOS = userFactory.getEntities(dataInitializerProperties
                 .getUserNum());
         logger.info("Generated: {} users", userDTOS.size());
-        userDTOS.forEach(userService::add);
+        userDTOS.forEach(userService::register);
         logger.info("Saved: {} users", userDTOS.size());
     }
 
@@ -154,12 +154,20 @@ public class DataInitializer implements CommandLineRunner {
         if (dataInitializerProperties.isTestUser()) {
             logger.info("Generated test user with name: {} and password {}", dataInitializerProperties.getTestUsername(),
                     dataInitializerProperties.getTestPassword());
-            userService.add(UserDTO.builder()
+            userService.register(RegistrationDTO.builder()
                             .username(dataInitializerProperties.getTestUsername())
-                            .password(passwordEncoder.encode(dataInitializerProperties
-                                    .getTestPassword()))
+                            .password(dataInitializerProperties
+                                    .getTestPassword())
+                            .imageURL("https://www.pngitem.com/pimgs/m/137-1370051_avatar-generic-avatar-hd-png-download.png")
+                            .firstName("Test")
+                            .lastName("User")
                     .build());
+
+            UserDTO userDTO = userService.findByUserName(dataInitializerProperties.getTestUsername());
+            userDTO.setRoleName(Role.RoleName.ADMIN);
+            roleService.assign(userDTO);
             logger.info("Added test user");
+
         }
     }
 }
