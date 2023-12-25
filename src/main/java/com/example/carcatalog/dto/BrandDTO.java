@@ -1,5 +1,6 @@
 package com.example.carcatalog.dto;
 
+import com.example.carcatalog.utils.validation.annotation.UniqueBrandName;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.*;
 
@@ -25,5 +26,6 @@ import lombok.*;
 @Builder
 public class BrandDTO extends BaseDTO{
     @NotEmpty
+    @UniqueBrandName
     private String name;
 }

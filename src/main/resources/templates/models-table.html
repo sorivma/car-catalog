@@ -59,7 +59,7 @@
                         <option th:each="brand : ${brands}"
                                 th:value="${brand.name}" th:text="${brand.name}"></option>
                     </select>
-                    <div th:if="${#fields.hasErrors('category')}" th:errors="*{category}" class="text-danger"></div>
+                    <div th:if="${#fields.hasErrors('brand')}" th:errors="*{category}" class="text-danger"></div>
                 </div>
 
                 <div class="mb-3">

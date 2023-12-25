@@ -39,6 +39,7 @@
                     <label for="brandName" class="form-label">Brand Name:</label>
                     <input type="text" class="form-control" id="brandName" name="brandName" th:field="${newBrand.name}" required>
                 </div>
+                <p class="text-danger" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></p>
                 <button type="submit" class="btn btn-primary">Добавить</button>
             </form>
         </div>

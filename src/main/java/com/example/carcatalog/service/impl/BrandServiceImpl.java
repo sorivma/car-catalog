@@ -94,4 +94,9 @@ public class BrandServiceImpl implements BrandService {
         return modelService.findAll().stream().filter(modelDTO -> modelDTO.getBrandName().equals(name))
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public boolean existsByName(String name) {
+        return brandRepository.existsByName(name);
+    }
 }

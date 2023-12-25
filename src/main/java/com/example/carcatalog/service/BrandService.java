@@ -27,4 +27,5 @@ public interface BrandService extends BaseService<BrandDTO, UUID> {
     void delete(UUID id) throws EntityNotFoundException;
 
     List<ModelDTO> findModelsByName(String name);
+    boolean existsByName(String name);
 }

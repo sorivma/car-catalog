@@ -25,7 +25,8 @@ public class WebSecurityConf {
 
         httpSecurity
                 .formLogin()
-                .permitAll();
+                .permitAll()
+                .defaultSuccessUrl("/", true);
 
 
         httpSecurity
@@ -34,12 +35,27 @@ public class WebSecurityConf {
 
         httpSecurity.authorizeHttpRequests()
                 .requestMatchers("/").permitAll()
+
                 .requestMatchers("/offers/").permitAll()
                 .requestMatchers("/offers/details/**").permitAll()
                 .requestMatchers("/offers/add").authenticated()
+                .requestMatchers("/offers/recent").authenticated()
                 .requestMatchers("/offers/edit/**").authenticated()
                 .requestMatchers("/offers/delete/**").authenticated()
+                .requestMatchers("/offers/create-offer").authenticated()
+                .requestMatchers("offers/**").authenticated()
+
+                .requestMatchers("/brands").permitAll()
+
+
+                .requestMatchers("/models/brand/**").permitAll()
+
+                .requestMatchers("/models/all").permitAll()
+
+
                 .requestMatchers("/admin/**").hasRole("ADMIN")
+
+                .requestMatchers("/users/registration").permitAll()
                 .requestMatchers("/users/**").authenticated();
         return httpSecurity.build();
     }

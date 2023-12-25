@@ -92,6 +92,7 @@ public class UserServiceImpl implements UserService {
         User user = findEntityByUserName(userDTO.getUsername());
         user.setFirstName(userDTO.getFirstName());
         user.setLastName(userDTO.getLastName());
+        user.setImageURL(userDTO.getImageURL());
         return userMapper.toDTO(userRepository.save(user));
     }
 

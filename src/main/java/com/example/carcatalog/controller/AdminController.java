@@ -8,6 +8,7 @@ import com.example.carcatalog.entity.Role;
 import com.example.carcatalog.service.*;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.Banner;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -109,7 +110,13 @@ public class AdminController {
     }
 
     @PostMapping("/add-brand")
-    public String addBrand(@Valid @ModelAttribute("newBrand") BrandDTO brandDTO) {
+    public String addBrand(@Valid @ModelAttribute("newBrand") BrandDTO brandDTO,
+                           BindingResult bindingResult,
+                           Model model) {
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("brands", brandService.findAll());
+            return "brands-table";
+        }
         brandService.add(brandDTO);
         return "redirect:/admin/brands";
     }
